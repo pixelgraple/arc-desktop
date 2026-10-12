@@ -4,11 +4,21 @@
 
 Arc brings local models, voice, screen context, research and task tools into one Windows desktop app. Its standout feature is **Show Arc**: share a screen or window and optional computer audio, then have a conversation about it. Local speech, vision and a text model work together; you choose when sharing starts and stops.
 
-**Current release: 0.51.52 · Windows x64 · development build**
+**Current release: 0.51.60 · Windows x64 · development build**
 
-[Download the Windows installer](https://github.com/pixelgraple/arc-desktop/releases/download/v0.51.52/Arc-Setup-0.51.52.exe) · [Release notes](https://github.com/pixelgraple/arc-desktop/releases/tag/v0.51.52) · [Version history](CHANGELOG.md) · [Arc website](https://arc-net.xyz/)
+[Download the Windows installer](https://github.com/pixelgraple/arc-desktop/releases/download/v0.51.60/Arc-Setup-0.51.60.exe) · [Release notes](https://github.com/pixelgraple/arc-desktop/releases/tag/v0.51.60) · [Version history](CHANGELOG.md) · [Arc website](https://arc-net.xyz/)
 
 This repository distributes Arc releases and documentation. Optional model weights are downloaded separately; they are not packed into the installer. Arc remains under active development, and external sites, hardware and model behavior can affect whether a task completes.
+
+## New in 0.51.60
+
+- **File History:** automatic local backups, searchable descriptions and saved revisions. Ask Arc to find earlier work and restore an exact copy, even if its working file or chat was deleted. Open **Created Files → File History**. Initial storage limit: 10 GiB; same-PC recovery, not disk-failure protection.
+- **Browser tasks:** 120 detailed workflows and four new controls for locating text, inspecting regions, highlighting and scrolling.
+- **Work Areas:** 60 guided areas with six-stage plans, checks and editable prompts, plus seven structured planning, evidence, comparison, statistics, conversion and text-review utilities.
+- **Coding:** exact line edits, reliable appends and read/check/repair/recheck workflows for supported saved files.
+- **Platforms:** native public Steam game research; 150 platform guides; a dedicated Twitch alerts page with setup instructions. Twitch sign-in requires a registered public Client ID, and real account delivery remains unverified until setup.
+
+[Changes since 0.51.52](releases/0.51.60.md) · [File recovery guide](releases/0.51.60/FILE_HISTORY.md) · [Twitch setup](releases/0.51.60/TWITCH_ALERTS.md)
 
 ## Watch, listen, and talk
 
@@ -72,14 +82,14 @@ Local inference stays on the PC when local components are used. Web search, conn
 
 ## Download verification and release status
 
-`Arc-Setup-0.51.52.exe` is approximately 319 MiB (334,292,623 bytes).
+`Arc-Setup-0.51.60.exe` is approximately 319 MiB (334,724,151 bytes).
 
 SHA-256:
 
 ```text
-7aaf881bcdf8507272c2e2a72d1f6a6907257f38b08aa7ac97a79617148de380
+7822b5d0405cc0e4f351948915f8cf0a464c598abef5ffe499c8c807c48c9cb6
 ```
 
 The release includes `SHA256SUMS.txt`. This installer is **not Authenticode-signed**. No matching VirusTotal report has been supplied for this exact build; reports for older hashes do not scan this file.
 
-For 0.51.52, 216 focused Node tests, 91 Python worker tests and 96 voice-boundary tests passed. The complete test run found three failures; the screenshot/file-card regression was repaired and passed its rerun, while two existing memory-budget failures remain. Live Focus/Brave testing reached eBay's Sold Items login screen; three authenticated sold listings and a live average are still unverified. See the release notes for precise coverage.
+For 0.51.60, 267 regression tests, 19 focused recovery tests, the plugin-upgrade check, real storage/UI checks, TypeScript, the production build and packaged runtime checks passed. These overlapping runs are not a full application-suite rerun or a live-model benchmark. The two memory-budget failures documented in the earlier full run have not been established as resolved by this release. Authenticated eBay sold-listing results and real Twitch account delivery retain their documented setup and verification limits. See the release notes for coverage.

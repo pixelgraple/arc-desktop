@@ -1,4 +1,124 @@
-# Arc version history — cumulative release 0.51.52
+# Arc version history — cumulative release 0.51.60
+
+Published October 11, 2026. This Windows x64 update includes versions **0.51.53–0.51.60** since the previous public **0.51.52** release.
+
+[Download 0.51.60](https://github.com/pixelgraple/arc-desktop/releases/tag/v0.51.60) · [Current feature overview](README.md) · [Detailed release notes](releases/0.51.60.md)
+
+Development notes below are newest first. Later versions supersede earlier defaults and feature limitations. Test counts and measurements apply to their stated builds. In particular, 0.51.55 adds Twitch alerts after the earlier platform-guide release described them as future work. Guides are instructions, not additional model training or proof that a task succeeded.
+
+## Arc 0.51.60 — File History
+
+- Created Files now opens a searchable history with dates, file descriptions, source excerpts, version selection and exact restoration. The output folder remains one click away.
+- New files, continued files, verified local-PC saves, local PHP project files and generated images are automatically backed up locally. Existing Created Files are imported after startup without loading an AI model.
+- Arc can search earlier work, inspect a verified backup, and restore an explicitly requested file in chat. Results use real file receipts, not a reconstruction from model memory.
+- SHA-256 verification detects damaged backups. Restoration preserves existing files by creating numbered copies. Backups are separate from conversation deletion and working-file deletion.
+- Identical content is stored once. Storage is limited to 10 GiB of unique bytes and 50,000 records, with visible warnings and manual removal; no automatic deletion of old versions.
+- Existing file permissions, download limits, code sandboxes and server-side SSH backup behavior remain in place. Restoring a file never executes it or publishes it to a server.
+
+File History protects against losing a working copy on this PC. It does not replace an off-device backup, restore files deleted before their first backup, or automatically rebuild a complete multi-file project.
+
+## Arc 0.51.59
+
+Arc gains a searchable Browser tasks collection in Settings → Plugins: 120 detailed workflows across twelve groups, with concrete procedures, evidence checks, recovery instructions and editable example prompts. Enabled relevant excerpts use the existing context budget; the collection does not add 120 executable engines or claim to train a model.
+
+Four new controls extend the existing browser controller:
+
+- Locate literal rendered text with nearby context and region positions.
+- Inspect a selected region as text, headings, links, labeled controls or table rows.
+- Show a passive blue outline for discussion; Escape or ten seconds removes it.
+- Scroll the page or a selected container, or bring an observed target into view.
+
+The controls share the existing schema validation, browser connection, cancellation and human-verification boundaries. They do not expose arbitrary JavaScript. Region reading excludes hidden text and editable values and returns bounded, untrusted page evidence. Small-context tool results retain complete records and continuation positions; all 24 connected controller schemas remain available.
+
+Workflows cover tabs, navigation, targeting, copying, screenshots, vision discussion, forms, posts and media, source research, structured data, reporting, usability and recovery. Screenshots and vision use the existing capture and inference paths. Instructions distinguish an actual image, a text-shot, a source URL, a draft and a verified submitted result.
+
+Validation includes all 120 guide records and their selection/off switches; real Chromium DOM fixtures; real Playwright MCP transport in an isolated local page; browser controller, tool-agent and permission regressions; responsive React settings checks; TypeScript and production build. These checks do not benchmark a live language model or certify every external platform. Site sign-ins, browser permissions and CAPTCHA handling remain user-controlled. Bounded DOM inspection can omit canvas, shadow-root and frame content; existing frame snapshots or screenshot vision remain necessary where applicable.
+
+No dependencies or model downloads were added. The installer is a separate update; building it does not modify a running Arc installation.
+
+## Arc 0.51.58 — Work Areas
+
+Arc now includes 60 work areas in Settings → Plugins, covering software, web development, research, data and mathematics, writing and learning, planning, platforms, voice and vision, professional information, and operations.
+
+Each area includes a detailed guide, six stages with acceptance checks, prerequisites, failure handling, a concrete deliverable and an editable example prompt. The searchable interface supports group filters, guide enable switches and compact layouts. See the complete area index.
+
+Seven new first-party utilities run through Arc's existing plugin dispatcher:
+
+- Work-area planner: produces a pending six-stage plan and an optional JSON checkpoint file.
+- Workflow checkpoint audit: identifies missing steps and evidence, stale guide versions and unreadable Created Files references.
+- Research evidence audit: finds missing source links, absent excerpts, duplicate pages and declared conflicts.
+- Weighted option comparison: calculates explicit 0–100 ratings against user-defined weights; incomplete options remain unranked.
+- Measured-value summary: calculates count, range, sum, mean, median, percentiles and sample/population standard deviation.
+- Explicit unit converter: handles compatible length, mass, time, storage, volume and absolute-temperature units.
+- Text length and repetition review: measures words and paragraphs and flags repeated substantial passages, including complete Created Files up to 2 MiB.
+
+These utilities have bounded schemas and no host shell, network, model-download or arbitrary filesystem access. Requested exports use the existing Created Files service, which preserves originals. Existing guide and tool switches remain effective; no personal guides are replaced. Relevant compact instructions stay within the existing selection budget, and full guides are read on demand.
+
+Plans and evidence notes are not independent proof that a task was completed. The audits identify structural problems and verify artifact availability where applicable; they do not establish truth, narrative quality, source independence or successful remote actions. Platform access, speech, vision and code execution still depend on their existing supported runtimes and permissions. No model weights or inference backends change in this release.
+
+Validation includes deterministic tool fixtures, all 60 planner/guide routes, real plugin dispatch and Created Files exports, persistence of off switches, malformed inputs, cancellation, twelve repeated-prose cases, catalog integrity and desktop/narrow React UI interaction checks. These checks are not a live benchmark of model intelligence or a claim that every external platform task was performed.
+
+## Arc 0.51.57 — Check and debug saved files
+
+Ask Arc to test/debug a saved file or check it and correct any errors. Direct debug requests and conditional correction now use the existing read, check, repair and recheck workflow. Arc preserves originals, saves verified revisions and can repair exact lines in larger files.
+
+Existing-file diagnostic requests automatically check the saved source when its checker is enabled. JavaScript debug requests also require real isolated assertions, rerun unchanged after repair. Clean files stay unchanged; missing or unsupported checks and stale file hashes cannot become a successful validation result. Check-only requests do not grant editing permission, and syntax-only requests do not execute JavaScript.
+
+Plugin descriptions include examples and explain the scope. Syntax checks do not establish complete runtime behavior, security or deployment readiness. No dependencies were added and no generated code gains host execution privileges. All 0.51.56 features, including file appends, line edits and Twitch alerts, are retained.
+
+## Arc 0.51.56 — Targeted coding file edits
+
+Arc can read exact line ranges and fix only those lines in Created Files, preserving the surrounding code and original version. Current source hashes and observed ranges guard against stale or guessed edits. Supported syntax checks and existing JavaScript assertions run on corrected revisions when enabled.
+
+Appending now recognizes direct requests naming a code file, retains original source and hash through the writing stage, and checks the saved result. Older flat-layout files append in their actual location instead of failing against a new category folder. The local PHP workspace gains append and inclusive line-replacement actions without changing its separate publish controls.
+
+No dependencies were added. Existing Twitch alerts and other features are retained. File operations do not execute generated code or grant access to system folders. Setup examples and limits are in Coding tools.
+
+## Arc 0.51.55 — Twitch alerts
+
+Twitch now has its own settings page, available directly in Settings and through Plugins. Connect with Twitch's public-client device authorization flow, choose followed or searched channels, and receive live-stream alerts while Arc is minimized. Optional stream-ended/category alerts, game filters, quiet hours, device-voice announcements, recent activity and notification testing are included.
+
+The listener runs without AI inference and reuses Arc's notification inbox and Windows banners. Tokens use OS-protected storage; connection recovery, token refresh, duplicate suppression, cancellation and disconnect are covered by automated tests. Clicking a channel notification opens the channel in your default browser without focusing Arc.
+
+This build requires a one-time Twitch Public application registration and Client ID. Setup instructions are built into the page and documented here. No Twitch account was connected during development. Real subscribed-channel delivery remains unverified until that setup is completed. No extra dependencies were added.
+
+Existing Steam tools, platform guides, models and browser/voice workflows are retained. This feature does not automatically watch or record streams.
+
+## Arc 0.51.54 — Platform research guides
+
+October 10, 2026. Adds **150 original guides: 30 each for eBay, Steam, YouTube, X / Twitter and Twitch**, researched against official platform documentation. Each guide has a concrete example, distinct collection and analysis instructions, verification checks, failure handling and source references.
+
+- Find the five collections under **Settings → Plugins → Platform research guides**. Browse a platform's guides or send its example request to chat.
+- eBay: comparable sold prices, condition and lot normalization, screenshots, hidden-offer handling, small-sample uncertainty and exportable evidence.
+- Steam: native game lookup and current metrics, regional prices, reviews, news, achievements and comparisons. SteamDB historical data remains a reference link, not an automated lookup.
+- YouTube: available transcripts, timestamped summaries, tutorials, comparisons, claim checks, inspected frames and Watch with Arc.
+- X / Twitter: connected-session searches, threads, screenshot collections, author attribution, source checks and follow-up research.
+- Twitch: accessible public channel, schedule, category and clip research; discussion through explicitly enabled Voice screen/audio sharing. A dedicated Twitch OAuth/API connection, live alerts, full chat history and media downloader remain future work.
+- Complete task recipes fit the existing 8K automatic guidance budget; full access details and research references remain available in the guide. Added platform/domain recognition for eBay, Twitch and SteamDB.
+- Existing saved off switches remain authoritative. All previous guide files are retained. No dependencies, model changes, account connections or background recording were added.
+
+See the 150-guide index and research findings and future feature opportunities. Guides improve how existing capabilities are used; they do not make unavailable accounts or tools accessible.
+
+Validation covers guide contents, exact counts and hashes, reproducible generation, real tool references, task retrieval, 8K/16K guidance integration and upgrade/off-switch behavior. Website access still depends on the user's session and platform restrictions; this is not a claim that all 150 tasks ran against live signed-in accounts.
+
+This installer includes the Steam game research tools introduced in 0.51.53. Model weights remain separate. No new VirusTotal result is claimed for this file.
+
+## Arc 0.51.53 — Steam game research
+
+Built October 9, 2026. Adds read-only game lookup and statistics to ordinary chat and a clear Settings → Plugins → Steam game research · SteamDB links section with an example prompt and enable switches.
+
+- Search by game name, resolve the correct app ID and retrieve current Steam players, region-specific store prices, review totals, game metadata, global achievement percentages and recent news.
+- Source cards, per-metric retrieval times, five-minute bounded caching and rate-limit cooldowns. Missing data is unavailable, never an invented zero. No account or API key required.
+- SteamDB app/chart/history reference links. SteamDB disallows automated scraping and has no public API; Arc does not fetch or claim its historical statistics. Historical peaks, price lows, sales/owner estimates and private player data remain unavailable.
+- Existing off switches, offline requests and host tool allowlists remain authoritative. No new dependencies, credential access, background polling or automatic downloads.
+
+Validation: 18 new JavaScript Steam tests, three Python worker-protocol tests, 48 related chat/research/video/setup tests and three affected plugin-catalog/migration checks passed. Live Steam checks passed for Stardew Valley, Counter-Strike 2 and Terraria, with additional achievements/news/UK-price checks. TypeScript and production UI build passed. The package check caught a missing worker registration; the two Steam tools are now registered in the shared model protocol. A broader plugin-suite attempt stalled in an unrelated later test and was stopped; the affected plugin tests were then run separately and passed. This is not a claim that the entire app test suite passed, nor a new local-model benchmark.
+
+See Steam research for prompts, endpoints and limitations. The Windows installer remains unsigned by Authenticode; no VirusTotal result is claimed for this new file. Model weights are separate and normal updates preserve user data.
+
+---
+
+## Prior publication: cumulative release 0.51.52
 
 Published October 9, 2026. The previous public installer in this repository was **0.50.4** under the `EXE` tag. Arc 0.51.52 includes the work below as one cumulative Windows update.
 
