@@ -4,21 +4,39 @@
 
 Arc brings local models, voice, screen context, research and task tools into one Windows desktop app. Its standout feature is **Show Arc**: share a screen or window and optional computer audio, then have a conversation about it. Local speech, vision and a text model work together; you choose when sharing starts and stops.
 
-**Current release: 0.51.60 · Windows x64 · development build**
+**Current release: 0.51.65 · Windows x64 · development build**
 
-[Download the Windows installer](https://github.com/pixelgraple/arc-desktop/releases/download/v0.51.60/Arc-Setup-0.51.60.exe) · [Release notes](https://github.com/pixelgraple/arc-desktop/releases/tag/v0.51.60) · [Version history](CHANGELOG.md) · [Arc website](https://arc-net.xyz/)
+[Download the Windows installer](https://github.com/pixelgraple/arc-desktop/releases/download/v0.51.65/Arc-Setup-0.51.65.exe) · [Release notes](https://github.com/pixelgraple/arc-desktop/releases/tag/v0.51.65) · [Version history](CHANGELOG.md) · [Arc website](https://arc-net.xyz/)
 
 This repository distributes Arc releases and documentation. Optional model weights are downloaded separately; they are not packed into the installer. Arc remains under active development, and external sites, hardware and model behavior can affect whether a task completes.
 
-## New in 0.51.60
+## New in 0.51.65
 
-- **File History:** automatic local backups, searchable descriptions and saved revisions. Ask Arc to find earlier work and restore an exact copy, even if its working file or chat was deleted. Open **Created Files → File History**. Initial storage limit: 10 GiB; same-PC recovery, not disk-failure protection.
-- **Browser tasks:** 120 detailed workflows and four new controls for locating text, inspecting regions, highlighting and scrolling.
-- **Work Areas:** 60 guided areas with six-stage plans, checks and editable prompts, plus seven structured planning, evidence, comparison, statistics, conversion and text-review utilities.
-- **Coding:** exact line edits, reliable appends and read/check/repair/recheck workflows for supported saved files.
-- **Platforms:** native public Steam game research; 150 platform guides; a dedicated Twitch alerts page with setup instructions. Twitch sign-in requires a registered public Client ID, and real account delivery remains unverified until setup.
+- **Four measured VRAM tiers:** choose Light, Balanced, Maximum or Extreme in **Settings → AI Performance → Lower VRAM usage**. Arc tests supported cache/buffer settings and eligible CPU placement while keeping the selected model and context. The short comparison accepts at most 20%, 35%, 50% or 75% generation speed loss respectively, with the same prompt-speed check when normal timing is available; real task speed and memory savings vary.
+- **Clearer research screenshots:** validate visible page areas, use a readable viewport unless whole-page coverage was requested, and deliver the actual saved image with its vision observations. Final-answer repairs preserve substantive explanations alongside the image; a persistent plan-only reply is reported as incomplete.
+- **Six substantial completion guides:** find research, screenshots, file continuation, debugging and recovery workflows in **Settings → Plugins**. The full references contain 8,100 words; compact instructions load when relevant, with longer references available on demand. They guide existing tools rather than add new executable backends.
+- **Longer files in sections:** Ultra's optional **Until done** mode keeps requirements, exact file endings and revision-checked checkpoints on disk. Incremental JSON and repetition checks help protect accepted work while bounded continuation builds the next section.
+- **Multi-file website projects:** save a shared plan, create pages/styles/scripts one file at a time, check supported syntax/local links, resume from saved revisions and export the directory.
+- **Measured evidence:** the report separates engine token speed from web/browser/vision/file task completion, and GPU memory from host RAM. It records actual failures and limits instead of counting an intended action as completed.
 
-[Changes since 0.51.52](releases/0.51.60.md) · [File recovery guide](releases/0.51.60/FILE_HISTORY.md) · [Twitch setup](releases/0.51.60/TWITCH_ALERTS.md)
+These are tested tool and workflow improvements, not a guarantee that every model answer is accurate or every task will finish.
+
+### Measured on Arc Focus and RTX 5090
+
+One Windows PC, 16,384-token context, three 512-token generation samples per mode. These are **raw whole-device text-generation peaks**, not exclusive model allocations; pre-load medians were not subtracted.
+
+| Mode | Median tok/s | Throughput change | Pre-load GPU median, MiB | Generation GPU peak, MiB | Raw peak MiB saved |
+| --- | ---: | --- | ---: | ---: | ---: |
+| Normal | 187.28 | Reference | 1,711 | 8,278 | Reference |
+| Tier 1 | 185.38 | 1.01% loss | 2,096 | 7,781 | 497 |
+| Tier 2 | 184.24 | 1.62% loss | 2,008 | 7,927 | 351 |
+| Tier 3 | 182.09 | 2.77% loss | 1,889 | 7,490 | 788 |
+| Tier 4 | 52.67 | 71.87% loss | 2,210 | 7,432 | 846 |
+
+All five final modes delivered the requested web answer, readable screenshot/vision result and exact 1,000-line file, and reused the model after work. Manual review still found factual and citation errors. Tier 4's file took 611.56 seconds versus Normal's 121.59 seconds, including recovered model-call failures and an unusually slow call. Its extra raw generation saving over Tier 3 was only 58 MiB in this run, so Extreme was a poor speed/memory trade-off here. Overall workload peaks, vision handoffs, CPU/RAM/disk counters, individual samples, earlier failures and measurement limits are in the full report.
+
+
+[Changes since 0.51.60](releases/0.51.65.md) · [Full workload report](docs/VRAM_WORKLOAD_REPORT_0.51.65.md) · [Machine-readable evidence](docs/VRAM_BENCHMARK_DATA_0.51.65.json) · [VRAM, RAM and SSD explained](docs/MEMORY_ARCHITECTURE.md)
 
 ## Watch, listen, and talk
 
@@ -70,7 +88,7 @@ Strata uses its own SSD-aware inference engine; it is not routed through llama.c
 
 Local sight and speech use separate optional models. The hardware optimizer benchmarks a bounded set of installed, compatible configurations and uses a default **32 GiB Arc system-RAM ceiling**. Windows CPU, CUDA and Vulkan execution paths are implemented; detecting AMD, Intel or Apple hardware does not mean every corresponding acceleration backend is implemented. This release is Windows x64, not a macOS build.
 
-An older RTX 5090 optimizer sample measured approximately 231 tokens/s for Swift and 192 tokens/s for Focus. Those are historical engine samples, not current-version benchmarks, whole-app latency or general accuracy scores. New Strata Q2_0 paired checks found similar short-prompt speeds before and after the projection variant; see the [version history](CHANGELOG.md). No universal speed or accuracy claim is made.
+The new [workload report](docs/VRAM_WORKLOAD_REPORT_0.51.65.md) compares Normal and four memory tiers, identifying the tested GPU, model, context, tuning and resource counters. It separates short calibration from research, screenshots, vision and file completion. These results do not establish universal VRAM savings, lower-card fit or model accuracy. See [the memory design](docs/MEMORY_ARCHITECTURE.md) for what stays on GPU, what can use RAM, and why Strata's SSD-aware engine is separate.
 
 ## Additional features and current limits
 
@@ -82,14 +100,14 @@ Local inference stays on the PC when local components are used. Web search, conn
 
 ## Download verification and release status
 
-`Arc-Setup-0.51.60.exe` is approximately 319 MiB (334,724,151 bytes).
+`Arc-Setup-0.51.65.exe` is approximately 319 MiB (334,808,652 bytes).
 
 SHA-256:
 
 ```text
-7822b5d0405cc0e4f351948915f8cf0a464c598abef5ffe499c8c807c48c9cb6
+f5397fc3aa9515654d9aac0de14674537921e9d8e805258bc413b5bbd2ac993b
 ```
 
-The release includes `SHA256SUMS.txt`. This installer is **not Authenticode-signed**. No matching VirusTotal report has been supplied for this exact build; reports for older hashes do not scan this file.
+The release includes `SHA256SUMS.txt`, detailed release notes and the [workload report](docs/VRAM_WORKLOAD_REPORT_0.51.65.md). This installer is **not Authenticode-signed**. No matching VirusTotal report has been supplied for this exact build; older reports do not scan this file. Signed application-update metadata is a separate protection.
 
-For 0.51.60, 267 regression tests, 19 focused recovery tests, the plugin-upgrade check, real storage/UI checks, TypeScript, the production build and packaged runtime checks passed. These overlapping runs are not a full application-suite rerun or a live-model benchmark. The two memory-budget failures documented in the earlier full run have not been established as resolved by this release. Authenticated eBay sold-listing results and real Twitch account delivery retain their documented setup and verification limits. See the release notes for coverage.
+The workload report records final automated and real-task verification with its limitations. Browser/account restrictions and model behavior can still prevent task completion. Authenticated eBay sold-listing results and real Twitch account delivery retain their documented setup requirements.

@@ -1,4 +1,171 @@
-# Arc version history — cumulative release 0.51.60
+# Arc version history — cumulative release 0.51.65
+
+Published October 12, 2026. This Windows x64 update includes **0.51.61–0.51.65** since public 0.51.60.
+
+[Current feature overview](README.md) · [Release notes](releases/0.51.65.md) · [Measured workloads](docs/VRAM_WORKLOAD_REPORT_0.51.65.md)
+
+Development notes below are newest first. Later versions supersede earlier defaults. Measurements apply only to their stated hardware and test scope. Guides provide instructions; they are not model training.
+
+## Arc 0.51.65 — Measured memory tiers and task-output fixes
+
+This release brings four optional lower-VRAM tiers, output continuity and multi-file website work to the public download, together with corrections found during real Arc Focus workload testing.
+
+## Screenshot recovery
+
+Some pages expose an accessibility landmark that contains useful text but has no painted box, such as MDN's `display: contents` main region. Arc now checks a selected screenshot area's visibility and dimensions before capturing. A layout-only or missing target returns a concrete instruction to select a visible child or request a page viewport, instead of repeatedly waiting on the same uncapturable element. Explicit area captures are not silently widened to include unrelated content.
+
+Screenshot tools also accept valid current-page references beyond the first 100 observed elements. The reference must still match the strict format and current page. If a fully completed tool response contains arguments that fail the action schema, Arc can report the correction while keeping the healthy text worker loaded. Broken or unfinished tool streams still release the failed worker.
+
+Combined research-and-screenshot requests retain search and source-reading tools for a bounded follow-through phase after saving the image. Successfully retrieved page text counts as a source read; search cards remain leads, and indexed fallback text is distinguished from a live page read. Missing requested source work is reported as incomplete while keeping saved screenshots attached. Multiple URLs do not necessarily represent independent publishers or establish factual accuracy.
+
+Screenshot guidance prefers a viewport or visible-element crop for ordinary text, while honoring explicitly requested full-page captures. Vision is instructed to identify unreadable or cropped text and avoid substituting familiar examples for pixels it cannot read. These instructions reduce avoidable ambiguity; actual screenshot and answer accuracy are reviewed separately in the workload report.
+
+For visual research, an untargeted screenshot uses the actual viewport unless the original user explicitly asked for full/whole/entire-page or top-to-bottom coverage. The receipt and notice describe the viewport and suggest scrolling for further sections. This prevents a model-selected full-page flag from needlessly shrinking a very tall document into unreadable pixels. Explicit full-page requests, targeted captures and standalone screenshot saving keep their existing scope; full-page vision can still have legibility limits.
+
+A guided diagnostic also found that selecting the top-level `body` or `html` element with `fullPage: false` could capture an entire tall document. Root-document requests now use the actual viewport and retain that coverage in screenshot receipts. Oversized non-root elements and iframe targets return guidance to choose a smaller visible region instead of silently changing the requested scope. The focused capture suite passed. All five final screenshot phases delivered readable viewport images, actual vision calls and substantive answers. The workload report separately records remaining factual and citation problems; readable pixels and successful tools are not a guarantee of an accurate explanation.
+
+Replies name the verified saved screenshot and retain its image card instead of substituting a webpage URL or an invented local filename for the delivered image. Requested vision observations are associated with the saved image ID and its recorded source page, with unreadability caveats preserved. Up to 20 observations remain bounded; unrelated image URLs and code examples are unchanged.
+
+A later Tier 2 diagnostic found that screenshot reply cleanup could discard a substantive researched explanation merely because it opened with “I'll research.” Cleanup now removes plan-only narration while preserving the substantive body, citations, mixed code, quoted text and fenced lines. The focused suite passed 63 tests, and replaying the actual failed answer retained its substantive remainder. The original delivery failure remains in the diagnostic record. Final comparisons use the repaired source in every mode and distinguish successful tool calls from the delivered explanation.
+
+Another diagnostic completed search, source reads, a readable screenshot and vision but returned only a plan with printed navigation calls. Final response instructions now close the tool phase and retain the combined research obligation. A confidently plan-only answer gets one bounded evidence-only composition retry that cannot run tools or repeat captures. A persistent plan remains incomplete while preserving real images and source receipts. Actual explanations, code, quoted plans and user-requested plans are preserved; image evidence fits a context-sensitive whole-payload budget. The focused repair suite passed 84 tests. This is completion handling, not automatic factual grading or guaranteed model accuracy; final live outcomes are reviewed separately.
+
+## File boundaries and unavailable sources
+
+For newly authored, line-counted JavaScript, Arc checks actual saved line counts across file sections. A missing separator between two otherwise complete sections can be inserted only when both sections parse as complete statements with safe semicolon boundaries and no open comment or literal. Exact-copy requests bypass this repair. Accepted bytes are not saved again during a retry. This addresses a measured case where 1,000 declarations were present but adjoining sections left fewer than 1,000 physical lines.
+
+A later Tier 3 test exposed a different failure: the first 100-line section was replayed, producing 1,000 physical lines but only 900 unique declarations. A narrow replay guard now verifies the current file ID/hash and the same raw section plus unchanged nonempty checkpoint, then returns the existing receipt and exact file tail without appending duplicate bytes or advancing the chunk count. Intentional repetition with an advancing checkpoint and exact-copy requests is preserved. The focused suite passed 63 tests, including the actual failure shape. Final live file outcomes remain separate from syntax-only checks.
+
+When a direct source read returns HTTP 403 or 429, Arc keeps that observation in trusted per-turn guidance through context compaction. It can choose another publisher or an already authorized normal browser path. This does not bypass a website's access restrictions or establish that the alternative source was successfully read. The workload report records the live retest outcomes separately.
+
+The later readable-capture test exposed another path: automatic reads after search could retry three pages on the same denied host before the model had a chance to recover. Automatic selection now skips hosts already observed as denied during that turn. When the available lead pool is blocked, Arc may make one alternate-source search using the original query with explicit denied-site exclusions. User-required access attempts remain distinct. Focused tests passed; final live outcomes are recorded separately, and this bounded retry does not guarantee access or bypass restrictions.
+
+A subsequent diagnostic completed the requested source reads but repeated a guessed unavailable URL instead of answering. Arc now retains exact failed-URL guidance and permits a narrowly scoped no-tools synthesis when a pure web-research contract is already fulfilled. Focused recovery tests passed. The failure ledger and incomplete-task checks remain; a second source receipt alone is not reported as a completed user-facing answer. Final live task results are recorded separately.
+
+Compacted research evidence now retains bounded, query-relevant exact passages and nearby qualifications from retrieved pages, instead of relying on a fixed prefix that may contain mostly navigation. Omission notices identify what the excerpt leaves out. Retrieved page text remains untrusted source material rather than tool instructions; retaining it does not establish that the model interpreted every qualification correctly.
+
+## GPU memory choices
+
+**Settings → AI Performance → Lower VRAM usage** offers Tier 1 · Light, Tier 2 · Balanced, Tier 3 · Maximum and Tier 4 · Extreme. The limits are 20%, 35%, 50% and 75% lower generation throughput in the short selection benchmark; the same prefill limits apply when normal prefill timing is available. First-token delay is checked when both timings are available. They are eligibility limits, not an intentional delay or a guarantee for every task. Missing timing is not a successful latency comparison. The 75% speed tolerance does not promise 75% less VRAM.
+
+Arc tests smaller processing buffers, supported cache precision and eligible CPU-layer placement. It keeps the selected model and context, respects the verified llama.cpp text worker's RAM allowance, rejects unstable trials, and reuses measured results. Normal mode restores the normal tested configuration. Strata retains its separate engine and upstream low-RAM policy.
+
+Tier 4 adds at most three combinations of supported Q4 K/V cache and selective CPU placement to the earlier tests. It can reconsider healthy earlier trials against its more tolerant speed limit, while crashes, out-of-memory results and unhealthy configurations remain excluded. Existing Tier 1–3 candidate identities stay stable for safe cache reuse.
+
+## Long output and saved work
+
+- Ultra **Until done** writes bounded sections with revision-checked files, exact saved endings and disk checkpoints.
+- Multi-file website projects preserve source, a shared plan and dependencies, then build one file at a time. Local syntax/link checks and directory export are available.
+- File History retains verified versions so Arc can find and restore earlier work when the working file is lost.
+- A finite native context window still applies. Disk records are retrieved as needed; they do not create unlimited active context or guarantee arbitrary output length.
+
+## Six guides for completing the actual task
+
+Six substantial workflows cover verified multi-source research, readable screenshots and vision, combined research/image requests, chunked file completion, debug/verify/save work, and resuming from evidence. The full references contain 8,100 words in total, with 1,310–1,390 words each. Find them by name in **Settings → Plugins**; the guide index describes each one.
+
+Automatic retrieval uses a complete compact task/check/stop recipe within the existing context budget. Each serialized single-guide selection is 1,811–1,888 characters including the shared notice, identity and formatting; the recipe body is smaller. The longer reference is available when needed. Browser screenshots no longer imply a live screen-sharing session during routing. The guides use existing tools and permissions; they do not add executable backends or prove a general increase in intelligence or accuracy. Newly bundled entries preserve users' saved off switches.
+
+## Release verification
+
+The latest completed full automated regression suite reports 3,458 tests: 3,453 passed, 0 failed and 5 skipped, in 556.146 seconds. It predates the subsequent finalization repair. After that repair, 478 tests across 27 affected test files passed with no skips in 11.134 seconds. The overlapping full, affected-area and focused counts are not added together. An earlier concurrent run's crawl timeout and successful isolated rerun remain documented separately. Automated checks are not a general model-accuracy score or final installer verification.
+
+The completed Normal/Tier 1/Tier 2/Tier 3/Tier 4 matrix used the same 20-file implementation fingerprint, real Arc Focus inference, public-web research, browser screenshots and local vision, a 1,000-line JavaScript file, post-task model residency, and the actual bundled guide path. All five modes delivered the requested research answers and readable images, passed the exact 38,785-byte/1,000-unique-line file check and independent syntax parse, and reused the prepared model after the task. Earlier diagnostic failures and recovered errors remain recorded. Manual review found remaining factual, source-independence and citation limitations; successful delivery is not a perfect accuracy score.
+
+On this RTX 5090 desktop, Normal reached a median 187.28 native generation tokens/second with a raw whole-GPU generation peak of 8,278 MiB. Tier 3 reached 182.09 tokens/second with a 7,490 MiB peak: 788 MiB lower and 2.77% less throughput. Tier 4 reached 52.67 tokens/second with a 7,432 MiB peak: 846 MiB lower and 71.87% less throughput. Its 1,000-line file took 611.56 seconds versus Normal's 121.59 seconds, including two recovered model-call failures and an unusually slow call. That whole-task difference cannot be attributed entirely to CPU placement. Pre-load readings, separate vision/overall peaks, all other tiers and limitations are in the report; these raw GPU differences are not precise model-only allocations or a guarantee for smaller cards.
+
+A separate screenshot-component UI check rendered three receipt-based image cards and verified expand/shrink without page errors or horizontal overflow at 1,100-pixel and 390-pixel widths. This component fixture check is separate from the live browser/vision matrix and a full Electron end-to-end test. Installer identity and package-source checks are recorded outside this bundled document with the final release checksum.
+
+See the detailed workload report and AI Performance architecture for measured results, implementation details and limits. See the previous tier release notes for the initial short calibration measurements.
+
+No new model download or application dependency is required. The selected chat model remains resident after work; auxiliary vision may temporarily release and restore it. The Windows installer is not Authenticode signed. Older VirusTotal scans do not apply to this installer; use the published checksum to identify this exact build.
+
+## Arc 0.51.64 — Three GPU memory-saving tiers
+
+**Settings → AI Performance → Lower VRAM usage** now offers three levels. Tier 1 accepts up to 20% lower measured generation/prompt speed, Tier 2 up to 35%, and Tier 3 up to 50%. The switch defaults off; Tier 1 is the initial choice when enabled.
+
+Arc benchmarks the selected model with smaller prompt buffers and supported Q8/mixed Q8-Q4 caches. Tier 2 also tests a small number of model blocks in system RAM. Tier 3 tries more CPU blocks and a Q4 K/V cache. When the verified engine supports tensor placement, Arc keeps the output projection on its normal GPU path; otherwise it tests conventional partial GPU offload. Layer counts come from bounded GGUF metadata reads, never from a GPU-name guess.
+
+The existing real-inference benchmark decides which settings qualify. All five basic response checks must pass, generation and prompt throughput must satisfy the chosen tier, and first-token delay is checked. When GPU telemetry is available, savings must be observed. Among memory results within 128 MiB, the existing performance/quality score breaks the tie, so a tiny whole-device fluctuation does not justify a large slowdown. Short tests are not a guarantee of speed or answer quality for every workload.
+
+- Keep model weights, context window and the default 32 GiB RAM ceiling. Partial offload gets a conservative extra RAM allowance within that same ceiling.
+- Keep the chosen model resident using Arc's existing residency service. The comparison temporarily reloads models; there is no new idle-unload timer.
+- Reuse completed measurements when changing tiers or restarting. A speed rejection can qualify at a more tolerant tier; crashes/OOM and unhealthy configurations remain excluded.
+- Cancel a running comparison and restore the previous preference/profile. Turning the switch off restores the normal tested baseline.
+- Keep CPU-only models and Strata on their existing engines. No new model download, runtime dependency or automatic context reduction.
+
+More VRAM saving is not proportional to slowdown. On a fast GPU, transferring computation to the CPU can exceed a 50% speed loss very quickly. Arc retains a faster compatible option when that happens. Measurement reports and repeatable native benchmarking are under `work/qa/low-vram-*` and `scripts/benchmark-low-vram.cjs`.
+
+## Local measurements (RTX 5090, Arc Focus, 16,384 context)
+
+The final isolated sweep used a 32 GiB RAM ceiling and real native generation. These are whole-device GPU peaks (other apps contribute), not per-model allocation claims.
+
+| Selected mode | GPU peak | Reply speed | Observed saving vs normal |
+| --- | --- | --- | --- |
+| Normal | 8,251 MiB | 188.45 tokens/s | — |
+| Tier 1 | 7,411 MiB | 184.32 tokens/s | 840 MiB |
+| Tier 2 | 7,411 MiB | 184.32 tokens/s | 840 MiB |
+| Tier 3 | 7,285 MiB | 191.15 tokens/s | 966 MiB |
+
+All selected configurations passed 5/5 basic response checks. Tier 3 used a Q4 K/V cache and was slightly faster in this short run; the tier's 50% limit is a maximum acceptable loss, not an intentional delay. The mixed Q8/Q4 alternative was much slower for essentially the same memory use, so the tie-break retained the faster configuration.
+
+Selective offload of two blocks reached 82.49 tokens/s, four blocks 52.09, and eight blocks 28.13, versus 188.45 normal. Their greater savings exceeded the 50% slowdown limit and were rejected. One CPU block qualified at Tier 3 but saved less than the chosen cache-only option. These results do not demonstrate large additional savings for Focus on this GPU. Other GPU/CPU/model combinations need their own measurements.
+
+Evidence: `work/qa/low-vram-2026-10-12T21-10-30-239Z/report.json`. No installed-user settings or model files were modified by this test.
+
+## Arc 0.51.63 — Lower VRAM usage
+
+An optional **Lower VRAM usage** switch is now available in **Settings → AI Performance**, above Advanced choices. Arc tests smaller processing buffers and supported cache compression on the selected model, then keeps a lower-memory configuration only when the real inference checks pass.
+
+- Preserve the selected model, its context window, the default 32 GiB RAM ceiling and existing model residency.
+- Compare normal settings with smaller prompt batches and supported Q8 or mixed Q8/Q4 caches with Flash Attention.
+- Reject failed configurations, basic response-check failures, and more than 20% generation/prefill slowdown; check first-token latency as well.
+- Display actual whole-device GPU savings where measured. Unknown telemetry stays unmeasured.
+- Reuse cached measurements on later launches. Turning the switch off restores the tested normal baseline.
+- Support cancellation with cleanup and retain existing fallback handling if a selected engine later fails.
+- Keep Strata on its own engine; CPU and incompatible engines keep normal settings.
+
+On the development RTX 5090, a short Arc Focus comparison at 16K context observed **840 MiB less whole-device GPU memory** and **186.25 vs 189.06 tokens/s** (about 1.5% slower). All five basic response checks passed. Other GPU applications can affect these measurements; this is not a universal savings or quality guarantee.
+
+No new dependencies, model downloads, automatic context reductions or system changes. This release reduces supported cache/workspace allocations; it does not compress all VRAM or add unlimited context. Existing workflows, voice, vision and Strata loaders are retained.
+
+## Arc 0.51.62 — Multi-file website projects
+
+Arc can build a complete local website as separate pages, styles, scripts and nested folders. Ultra's Until done mode writes one file at a time, saving source, a shared plan and progress on disk. Completed file bodies stay outside the next model prompt; relevant source can be read back when needed.
+
+- Resume an unfinished project after stopping or restarting Arc, with source-revision checks before continuing.
+- Save large files in sections, preserve original requirements and dependency contracts, and reject duplicate source sections.
+- Check supported syntax and local HTML/CSS/JS links, with bounded targeted repairs before reporting completion.
+- Export the whole project directory through **Code → Local website workspace → Export & open folder**, with per-file hash verification.
+- Show completed-file counts and the next file in the workspace and saved-task panel.
+- Register the project tools with the native model worker and allow valid code blocks within the existing token budget.
+- Preserve existing File History, single-file tools, protected PHP preview and reviewed SSH publishing.
+
+No new dependencies or model downloads. The default 32 GiB system-RAM policy and the selected context window remain unchanged. Projects retain explicit size and work limits; this is incremental generation using saved files, not unlimited context. Source creation never executes or publishes generated code. See Multi-file website builds for usage and limits.
+
+## Arc 0.51.61 — Long output and saved task continuity
+
+Long files can be written in smaller verified sections, reducing the need to fit the entire output into one model response. Small working windows get smaller sections and output reserves. Ultra's Until done mode preserves progress and retries repeated output within bounded limits.
+
+- Persistent per-conversation task checkpoints and pinned requirements in the Context panel.
+- Manual resume after restart with current-file hash verification.
+- Compact file endings and declaration outlines to support continuing code without replaying its full contents.
+- Checks for explicitly requested paragraph, function and JSON-entry counts; early completion claims can require more writing.
+- Arc binds focused continuation calls to the saved file and revision, so small models no longer need to copy long identifiers or hashes. Explicit paragraph numbering and exact paragraph limits are checked before append.
+- Repetition protection for ordinary prose files as well as stories.
+- Incremental JSON validation before committing each section, plus complete-document checks at the end; complete existing files can be finalized without an extra append.
+- Checked JSON record batches let small models emit ordinary valid arrays while Arc assembles the outer document, preserves exact values and enforces the requested minimum entry count.
+- Longer bounded reply continuation, with honest incomplete status when recovery cannot finish.
+- Relevant project-source excerpts and original-source recall to leave more working space for output.
+- Foreground voice queue priority without interrupting an active generation or crossing model-switch boundaries.
+- Context inspector improvements and completion-token/section reporting.
+- Small-context memory-budget correction that preserves saved preferences and the reply allowance while borrowing only future-tool headroom.
+- Theme compatibility fixes for recent File History, Plugins and Twitch controls.
+
+No new runtime dependencies, model downloads or changes to the default 32 GiB system-RAM budget. Native model context limits remain enforced. This improves output continuity; it does not guarantee small-model accuracy or unlimited context. See the implementation notes for limits and testing scope.
+
+---
+
+## Prior publication: cumulative release 0.51.60
 
 Published October 11, 2026. This Windows x64 update includes versions **0.51.53–0.51.60** since the previous public **0.51.52** release.
 
