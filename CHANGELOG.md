@@ -1,10 +1,101 @@
-# Arc version history — cumulative release 0.51.71
+# Arc version history — cumulative release 0.51.75
 
-Published October 14, 2026 (America/Indianapolis). This Windows x64 development update includes **0.51.66–0.51.71** since public 0.51.65.
+Published October 15, 2026. Changes since public 0.51.71: 0.51.72–0.51.75. Later versions supersede earlier behavior, including the retired Reddit interval queue. Test counts retain their original scope and overlap.
 
-[Current feature overview](README.md) · [Release notes](releases/0.51.71.md) · [Download](https://github.com/pixelgraple/arc-desktop/releases/tag/v0.51.71)
+[Feature overview](README.md) · [Release notes](releases/0.51.75.md)
 
-Development notes appear newest first. Later versions supersede earlier behavior. Test counts and measurements retain their stated build and scope; overlapping runs must not be added together. Helper-team tests use scripted responses, Reddit posting still needs a live account check, and the neutral Strata extension trial is a specific 0.51.70 measurement.
+## Arc 0.51.75 — email, Reddit and timed-work guides
+
+This Windows alpha release includes 360 substantial new guides: 120 for email assistance, 120 for Reddit posting and 120 for timed work. It also brings the changes from 0.51.72–0.51.74 to the public download channel.
+
+### New guide library
+
+- Find the guides in Settings → Plugins under Guides. Each includes preparation, ordered steps, a worked example, verification, recovery and completion criteria.
+- Guides cover email categories, reply tone, sender filters, inbox progress and duplicate-send recovery; Reddit drafts, exact approval, browser state and one-time scheduling; and clock, timezone, reminders, missed times and task handoffs.
+- Automatic selection sends a compact task-relevant core to the model. Full instructions are available through the existing paged reader instead of filling the context window with the entire library.
+- Fixed guide selection so pause, cancel and status requests do not select Reddit post-creation guidance. Timed-work guidance requires a matching timed intent.
+- The bundled catalog now contains 21,123 workflows, including 20,887 authored guides and 236 retained upstream workflows. These are instructions for existing capabilities, not 360 new executable tools.
+- No new dependencies or model downloads.
+
+### Also new since public release 0.51.71
+
+**Saved-chat recall (0.51.72).** Written-chat requests can retrieve a bounded selection of relevant earlier conversations and recognized corrections. Settings → Memories includes Use past conversations; a request can use this chat only. Retrieval uses local CPU indexing, not another GPU model or training. Current instructions take priority and changing online facts still need fresh sources.
+
+**One approved Reddit post, now or later (0.51.73).** Review the exact account, community, title, body and resolved time in Settings → Reddit posts. Approve once in advance, then Arc can submit that one post through the connected browser while open and awake. This replaces interval batches. Changed drafts require new approval; missed times and uncertain submissions require review instead of duplicate retries.
+
+**Questionnaire-based email assistance (0.51.74).** Settings → Email assistant lets the user choose the observed mailbox, email categories, reply instructions/examples, sender filters and pace. One review starts one inbox pass. Messages are handled sequentially with fresh local-model context. Recipient/body checks, delivery records, pause/stop and uncertain-send handling help preserve control.
+
+### Scope and limits
+
+- Email adapters initially support fixed English, paginated Gmail, Outlook and Proton layouts. Unknown layouts stop for review. Synthetic mailbox tests do not establish compatibility with every real account; live sending still needs a supervised provider trial.
+- Reddit scheduling is one explicitly approved text post. Arc must remain running and awake. Login and CAPTCHA remain manual. There is no interval posting or bulk-posting capability in this release.
+- Other timed-work guides support reminders, planning and handoff to available tools. They do not add a general background scheduler for research, file creation or recurring email polling.
+- Guides cannot grant permissions, expand model context, promise task completion or override tool checks. No real email or Reddit post was sent during automated verification.
+- Windows alpha; the installer is not Authenticode-signed. Signed updater metadata and download hashes are separate integrity checks. No new VirusTotal result is claimed.
+
+### Validation
+
+The new library passed catalog integrity and reproducibility checks, routing tests for all 360 natural-language examples, full-reference hash/paging checks, and focused regression tests. The earlier email implementation passed 3,791 tests with 10 skips and zero failures. This release additionally runs the production UI build and packaged runtime checks, including the real reader over all bundled workflow references. These checks do not constitute live-account testing or a new model speed/quality benchmark.
+
+See [email setup](releases/0.51.75/EMAIL_ASSISTANT.md), [Reddit setup](releases/0.51.75/REDDIT_POSTS.md), [saved-chat recall](releases/0.51.75/CONVERSATION_RECALL.md), and the [360-guide index](releases/0.51.75/EMAIL_REDDIT_TIMED_GUIDES.md).
+
+
+## Arc 0.51.74 — questionnaire-based email assistance
+
+- Added Settings → Email assistant and a Plugins entry for browser-connected Gmail, Outlook and Proton Mail adapters.
+- Added a questionnaire for the observed mailbox, nine optional categories, per-category instructions/examples, general tone, allowed/excluded senders and a 30–3,600-second pace. One explicit review starts one inbox pass.
+- Added sequential local-model classification/reply drafting with a fresh context per message, no model tools, no cross-email history and bounded input/output.
+- Added persistent delivery identities, atomic submit-intent recording, exact recipient/body checks and sent-message verification. Uncertain attempts are held without automatic retries; restart requires review.
+- Added current-inbox progress, pause/stop, competing-work gates, login/CAPTCHA handling and existing-draft preservation.
+- Added four detailed email/Reddit workflows, including timed background posts and duplicate recovery. Chat can check or pause email work, but cannot approve a run.
+- No new dependencies. Existing Reddit posting approval remains unchanged.
+
+Initial browser compatibility uses fixed English DOM patterns and supported paginated inbox views. Unknown layouts fail closed. Tests use synthetic mailboxes; no real email was sent. Live account compatibility and delivery need a supervised trial on the user's actual provider. See [Email assistant](releases/0.51.75/EMAIL_ASSISTANT.md) for setup, retained state and limits.
+
+
+## Arc 0.51.73 — One approved Reddit post, now or later
+
+Arc can prepare a single Reddit text post and submit it once at a reviewed date and time. Requests such as “make this post in three hours” save a concrete time proposal beside the draft. In **Settings → Reddit posts**, review the full title and body, account, community, timezone and time, then approve in advance. **Post once now** is also available.
+
+### Changes
+
+- Manual title/body entry alongside one-at-a-time drafting with the selected local model.
+- One active post, replacing interval batches. Older batch queues are preserved paused for cancel/review; they cannot resume as batches.
+- An application timer reads the system clock without keeping a model generating. Valid future schedules survive restart; missed times require fresh approval. Windows lock or suspend pauses work. Arc must remain open and awake.
+- Relative delays resolve once when saved. Exact local date/time review handles timezone offsets, daylight-saving gaps and repeated local times. Edits invalidate review; stale draft revisions cannot authorize changed text.
+- The connected personal browser is searched for an accessible Reddit tab. Dedicated background selection and creation avoid foreground activation. An unfinished editor is preserved. Initial browser launch, connection permission or sign-in can still require the user.
+- Private windows are usable only when exposed by the authorized browser connection. No cookie/password copying or silent profile fallback.
+- Reddit editor checks recognize ordinary paragraph and blank-line structure while verifying exact submitted text. User-written mentions of CAPTCHA do not masquerade as a site challenge; actual visible verification controls still stop automation.
+- Fresh account, community, content and timing checks precede one durable submit boundary. Lost or ambiguous receipts require reconciliation rather than an automatic retry.
+- Updated Plugins explanation and a substantial task guide describe proposal, review, background execution, timing limits and recovery.
+
+### Limits and verification
+
+There is no CAPTCHA bypass, recurring posting or multi-post queue. The feature supports text posts in recognized editors, not every possible Reddit layout or community requirement. An existing connected window stays in the background; the operating system or browser may display first-launch and permission UI.
+
+Tests use synthetic clocks/state and controlled local browser fixtures. They exercise advance approval, exactly one submission, cancelled or changed approvals, timezone handling, restart/missed schedules, wrong accounts, real challenge detection, editor readback, background tab behavior, duplicate prevention and uncertain receipts. Desktop and mobile review layouts are checked without a live account. The packaged application verifies the actual saved timer/approval/receipt service offline.
+
+No real Reddit post was published by these tests. Live account and community compatibility remain to be tested under user supervision. A verified receipt establishes the matching visible post at that time, not permanent acceptance by moderators.
+
+See [setup, behavior and limits](releases/0.51.75/REDDIT_POSTS.md).
+
+
+## Arc 0.51.72 — relevant recall across saved chats
+
+New written-chat requests can recover relevant excerpts from earlier saved conversations, including project work and recognized later corrections. Arc searches its local archive, checks selected messages against their current saved originals, and fits a bounded selection into the working context. Deleted or changed messages are excluded from stale results.
+
+**Settings → Memories → Use past conversations** is on by default and saves immediately. The existing **Use saved memories** master switch must also be saved as on; turning it off pauses local recall without clearing saved chats or the separate preference. Explicit opt-out survives restarts and older settings saves. A direct instruction such as “Use this chat only” excludes past conversations for that request.
+
+Context settings now show the titles and selected-message counts of past chats actually included in the reply. Existing source lists remain intact. The interface distinguishes no matching context, ongoing indexing and unavailable recall, and preserves unsaved manual notes when the new preference changes.
+
+Current instructions take priority. Old assistant replies are historical claims, not verified current facts, successful-action receipts or permission to act. Questions involving changing online information still need fresh research. Ambiguous project references or weak matches may require clarification; a saved archive is not a guarantee of perfect memory.
+
+Indexing uses the existing local CPU search facilities. This feature adds no dependency, GPU model or model training, and does not enlarge the selected context window. Only a relevant subset of saved text is loaded. Temporary voice sessions and raw screen/audio buffers are excluded. Text explicitly saved in a conversation can later be recalled like other saved chat text. Automatic cross-chat recall is used in written text chat; the live voice and direct image-analysis paths retain their existing context behavior. Existing conversation/context storage remains local; this change does not add encryption to those databases or alter the separate encrypted manual/personal-memory stores.
+
+Verification: 483 tests passed across the relevant context, recall, memory, settings, project-writing, research/browser/tool and main-process boundary suites, with one existing Windows symlink-privilege skip. An older theme test fixture was updated for the new setting and its failed assertion passed on rerun. Tests include actual bundled CPU retrieval of a cross-chat paraphrase without shared indexed words, live-message validation, topic-specific corrections, atomic correction/excerpt budgeting, cancellation, deletion, privacy controls and unchanged tool permissions. Project-writing checks cover recalled preferences, output-space reserves and recovery that removes optional history when the backend rejects the context size. TypeScript and the production UI build passed. New recall and existing personal-memory component checks passed at 1280px and 390px, covering keyboard access, save races and failures, pause states, preserved drafts and source reporting without external requests. The responsive screenshots were visually inspected.
+
+These checks use synthetic data and isolated fixtures. They validate persistence and interface behavior, not real-model recall quality, inference performance or the correctness of every remembered answer. See [conversation recall behavior and limits](releases/0.51.75/CONVERSATION_RECALL.md).
+
 
 ## Arc 0.51.71 — coordinated helper teams
 

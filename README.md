@@ -4,24 +4,27 @@
 
 Arc brings local models, voice, screen context, research and task tools into one Windows desktop app. Its standout feature is **Show Arc**: share a screen or window and optional computer audio, then have a conversation about it. Local speech, vision and a text model work together; you choose when sharing starts and stops.
 
-**Current release: 0.51.71 · Windows x64 · development build**
+**Current release: 0.51.75 · Windows x64 · development build**
 
-[Download the Windows installer](https://github.com/pixelgraple/arc-desktop/releases/download/v0.51.71/Arc-Setup-0.51.71.exe) · [Release notes](https://github.com/pixelgraple/arc-desktop/releases/tag/v0.51.71) · [Version history](CHANGELOG.md) · [Arc website](https://arc-net.xyz/)
+[Download the Windows installer](https://github.com/pixelgraple/arc-desktop/releases/download/v0.51.75/Arc-Setup-0.51.75.exe) · [Release notes](https://github.com/pixelgraple/arc-desktop/releases/tag/v0.51.75) · [Version history](CHANGELOG.md) · [Arc website](https://arc-net.xyz/)
 
 This repository distributes Arc releases and documentation. Optional model weights are downloaded separately; they are not packed into the installer. Arc remains under active development, and external sites, hardware and model behavior can affect whether a task completes.
 
-## New in 0.51.71
+## New in 0.51.75
 
-- **Coordinated helper teams:** substantial High/Ultra tasks can use three focused preparation assignments and two actual-result reviews. Arc performs the work and supported corrections, then reports back. Up to 24 helpers are allowed per parent turn, with five admitted at a time and queued overflow.
-- **One model shared by the team:** inference takes turns on the selected runtime/GPU queue; Arc does not load one weight copy per helper. More helpers may take longer and consume bounded ordinary memory and storage. No real-model speed, VRAM or quality benchmark is claimed for this team feature.
-- **Complete extension projects:** create a browser-extension source folder with exact manifest/resource names, all planned files, supported static checks, bounded repairs and export. Clearer dependency planning fixes circular file-writing plans. Review code and permissions before manually installing any generated extension.
-- **Compact personal memory:** **Settings → Memories → Details you've shared** captures clear direct-message facts locally in encrypted storage. Edit, remove or disable them. Relevant recall stays small and uses no extra inference model.
-- **Reviewed Reddit queues — beta:** **Settings → Reddit posts** prepares 1–10 editable drafts and finite queues at 15/30/60-minute intervals after exact human review. No self-approval, unlimited queue or automatic duplicate retry. Live Reddit posting still needs a supervised account/community check.
-- **Clearer task routing:** inspection requests produce assessments; extension source and isolated local JSON helpers follow their own completion checks. Proposed future account actions are not performed just because they appear in a source request.
+This release includes the changes since public 0.51.71:
 
-For 0.51.71, 505 targeted Node tests, four native protocol tests, responsive helper UI checks, TypeScript, the production build, workflow integrity and packaged-helper checks passed. Scripted models establish orchestration and boundaries, not answer quality or universal completion. A separate 0.51.70 Strata trial produced a neutral four-file word-counter extension in 32.1 seconds after a 40.5-second load; Chromium passed its five local behavior checks. See the release notes for scope and limitations.
+- **360 detailed guides:** 120 for email, 120 for Reddit and 120 for timed work. Find them in Settings → Plugins under Guides. Compact relevant guidance enters working context; complete instructions remain available through the paged reader. These guide existing capabilities rather than adding executable tools.
+- **Relevant saved-chat recall:** retrieve earlier work and recognized corrections from local saved written conversations. Use Settings → Memories → Use past conversations, or exclude recall for a request. No extra GPU model or training.
+- **One approved Reddit post, now or later:** review the exact account, community, title, body and time. Arc submits once while running and awake. This replaces interval batches; missed times and uncertain outcomes require review.
+- **Questionnaire-based email assistance:** choose categories, reply examples, sender filters and pace, then approve one supported inbox pass. Each message gets fresh local-model context, with delivery records and pause/stop controls.
+- **Better guide routing:** pause, cancel and status requests retain their intended operation; timed guidance requires a matching timed intent.
 
-[Changes since 0.51.65](releases/0.51.71.md) · [Helper teams](releases/0.51.71/DELEGATION.md) · [Memory controls](releases/0.51.71/PERSONAL_MEMORIES.md) · [Extension and local-helper guide](releases/0.51.71/LOCAL_TOOL_WORKSHOP.md) · [Reddit setup](releases/0.51.71/REDDIT_POSTS.md)
+The release regression run passed 44 tests. The earlier email implementation passed 3,791 tests with 10 skips and no failures. Production and packaged-reader checks verify the shipped build. Counts cover different scopes and should not be added together. No new speed or VRAM benchmark is claimed.
+
+Email adapters initially support fixed English paginated Gmail, Outlook and Proton layouts; live-account compatibility needs a supervised trial. Reddit posting also needs a supervised account check. Other timed-work guides cover reminders and planning, **not a general background research/file/email scheduler**.
+
+[Release details](releases/0.51.75.md) · [Guide index](releases/0.51.75/EMAIL_REDDIT_TIMED_GUIDES.md) · [Email setup](releases/0.51.75/EMAIL_ASSISTANT.md) · [Reddit setup](releases/0.51.75/REDDIT_POSTS.md) · [Chat recall](releases/0.51.75/CONVERSATION_RECALL.md)
 
 ## Earlier improvements in 0.51.65
 
@@ -113,14 +116,14 @@ Local inference stays on the PC when local components are used. Web search, conn
 
 ## Download verification and release status
 
-`Arc-Setup-0.51.71.exe` is approximately 319 MiB (334,855,928 bytes).
+`Arc-Setup-0.51.75.exe` is approximately 320 MiB (335,240,500 bytes).
 
 SHA-256:
 
 ```text
-1ef87546e639ce80a0c2914dfceee2ba0dd6fdbd0404a74ef27b89c7fc76bf6b
+6b46b4833e93cc40ab6b1068fb1a327b16b994e76b15380810ed639bcb2ac3ad
 ```
 
-The release includes `SHA256SUMS.txt`, a cumulative changelog and [detailed release notes](releases/0.51.71.md). The historical [0.51.65 workload report](docs/VRAM_WORKLOAD_REPORT_0.51.65.md) remains in the repository with its original scope. This installer is **not Authenticode-signed**. No matching VirusTotal report has been supplied for this exact build; older reports do not scan this file. Signed application-update metadata is a separate protection.
+The release includes `SHA256SUMS.txt`, a cumulative changelog and [detailed release notes](releases/0.51.75.md). The historical [0.51.65 workload report](docs/VRAM_WORKLOAD_REPORT_0.51.65.md) remains in the repository with its original scope. This installer is **not Authenticode-signed**. No matching VirusTotal report has been supplied for this exact build; older reports do not scan this file. Signed application-update metadata is a separate protection.
 
-Current release notes separate scripted helper-team checks, the earlier neutral Strata extension trial and unverified live Reddit posting. The historical workload report retains its own automated and real-task verification limits. Browser/account restrictions and model behavior can still prevent task completion. Authenticated eBay sold-listing results and real Twitch account delivery retain their documented setup requirements.
+Current release notes distinguish automated guide, email, scheduling and package checks from unverified live-account behavior. The historical workload report retains its own automated and real-task verification limits. Browser/account restrictions and model behavior can still prevent task completion. Authenticated eBay sold-listing results and real Twitch account delivery retain their documented setup requirements.
