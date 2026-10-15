@@ -1,4 +1,104 @@
-# Arc version history — cumulative release 0.51.65
+# Arc version history — cumulative release 0.51.71
+
+Published October 14, 2026 (America/Indianapolis). This Windows x64 development update includes **0.51.66–0.51.71** since public 0.51.65.
+
+[Current feature overview](README.md) · [Release notes](releases/0.51.71.md) · [Download](https://github.com/pixelgraple/arc-desktop/releases/tag/v0.51.71)
+
+Development notes appear newest first. Later versions supersede earlier behavior. Test counts and measurements retain their stated build and scope; overlapping runs must not be added together. Helper-team tests use scripted responses, Reddit posting still needs a live account check, and the neutral Strata extension trial is a specific 0.51.70 measurement.
+
+## Arc 0.51.71 — coordinated helper teams
+
+Hard tasks can split independent preparation and review into focused helper assignments. The existing local delegation engine now allows up to 24 helpers over one parent turn, including failed and cancelled helpers. At most five helpers are admitted at once; additional helpers wait in a queue. Queued time does not consume a helper's execution deadline.
+
+All helpers share the selected local model and its existing GPU queue. Arc does not load 24 copies of the model. Read-only tools can overlap, but inference takes turns; more agents may increase completion time. Helper conversations and reports use bounded working memory and local storage rather than accumulating all transcripts in the parent context.
+
+The intended task cycle is understand the request, gather relevant evidence, perform the authorized work, review actual results, repair supported issues, and return the result with its checks and remaining limitations. Helpers research, propose and review; the main agent retains file writes, browser actions and supported sandbox checks. A completed helper report is not a test receipt or proof that the overall task is complete.
+
+The existing General Settings helper toggle still controls delegation. The task panel shows queued, working and completed helpers, including later review batches. Existing three-helper snapshots remain valid so earlier conversation files and result cards are preserved.
+
+No new model, runtime or dependency is installed by this feature. The 24-slot limit is an orchestration limit, not a promise of 24-way inference or a measured speed improvement.
+
+Verification for this change: 505 targeted Node regression tests passed across the parent tool loop, project and extension writer, helper engine, browser/SSH/PC tool boundaries, saved artifacts, context compaction and runtime queues. Four native Python protocol tests passed for helper planning and exact-path project review. The UI check passed at desktop, tablet and 390px widths with 24 helpers and no renderer errors. TypeScript and the production UI build passed; the workflow catalog passed its integrity and reproducibility check.
+
+These checks use scripted model responses and isolated fixtures. They establish orchestration, validation and persistence behavior; they do not measure real-model answer quality, VRAM usage or task speed. Existing permission boundaries and checks remain responsible for actual actions and execution.
+
+## Arc 0.51.70 — clearer project planning
+
+A real Strata extension-generation test exposed a planning failure: popup HTML linked its script, while the script referred back to the HTML's elements. The model treated both directions as file-writing prerequisites and repeated the circular plan. Arc rejected it before creating incomplete source files.
+
+Project planning now explains that `dependsOn` means a file must be written first, not that two finished files refer to each other at runtime. Shared IDs, selectors and interfaces belong in the plan's shared conventions and file contracts. Extension planning includes a concrete acyclic ordering example. Unknown dependencies and circular plans receive distinct, specific correction guidance; invalid edges are never silently removed.
+
+The complete extension-folder workflow from [0.51.69](releases/0.51.69.md) remains in place, including exact filenames, every-file completion, static Manifest V3/resource checks, bounded continuation and saved checkpoints. No new dependencies or model downloads are required.
+
+Validation passed 139 focused regression tests. A real installed Strata Q2_0 model generated a neutral four-file word-counter extension through Arc's production project workflow: 32.1 seconds for generation and project work after a 40.5-second model load. Exported file hashes matched the saved project. Chromium 153 loaded the extension and passed all five word-count checks, with no page errors or external requests. These are one-machine measurements, not a general performance guarantee.
+
+Verification covers neutral local popup behavior. This does not establish that every model-generated extension works on every website. Generated source and requested permissions still require review before installation.
+
+## Arc 0.51.69 — complete browser-extension source projects
+
+New browser-extension requests now use Arc's existing sequential project builder. Previously a manifest could be separated from HTML/JavaScript, and one saved file could satisfy the ordinary file-completion check even when the extension needed several files.
+
+- Preserve `manifest.json` at the root and exact relative resource paths in one exported directory. Repeated builds get separate project folders instead of renaming required source files.
+- Save every planned file before reporting the project complete. Up to 12 files can continue in ordinary text chat within 32 model rounds. Larger work and longer corrections retain Ultra → Until done, cancellation, hashes and saved checkpoints.
+- Check basic Manifest V3 metadata, declared local resources, missing popup/scripts and common extension-page CSP errors. Failed checks trigger bounded repairs or retain an incomplete result.
+- Keep assessment requests, explicit single-file requests, and live inspection/installation tasks distinct. Describing future extension behavior does not operate the user's browser or accounts.
+- Record project tool names and fixed failure codes in local diagnostics without saving source code, page content or URLs.
+
+Open **Code → Local website workspace**, choose the saved project, and use **Export & open folder**. Review its source and requested permissions before manually loading it through the browser's extension developer controls.
+
+Validation includes 137 relevant automated checks covering routing, output-only write restrictions, multi-file export, pending resource references, repair, resumable limits, syntax and diagnostics. Browser behavior checks use a benign local popup fixture in a fresh Chromium profile; fixture-driven checks are not evidence of a particular model's coding reliability. There is no automatic installation, publishing, arbitrary-code execution or new dependency/model download. Static checks are not a complete Chrome manifest or security audit, and do not establish compatibility with arbitrary websites.
+
+See [the source-project workflow](releases/0.51.71/LOCAL_TOOL_WORKSHOP.md) and [Chrome's manifest reference](https://developer.chrome.com/docs/extensions/reference/manifest).
+
+## Arc 0.51.68 — tool assessment and creation routing
+
+Arc now distinguishes inspecting an idea, writing browser-extension source files, and publishing an isolated reusable helper.
+
+- An inspection followed by “tell me if you can build this” produces a feasibility report instead of being replaced by a missing-publication warning.
+- Explicitly requested assessment reports can still be saved as files.
+- Browser-extension projects use the normal source-file tools. Arc's JSON-helper sandbox cannot install an extension or access the browser DOM.
+- Descriptions of a proposed extension's future behavior do not authorize typing or submitting account actions during inspection or source creation.
+- An explicit later implementation instruction can request source creation. A source-file receipt is not proof that the extension was installed or tested in a browser.
+- Local-helper failures identify whether authoring was unavailable, never attempted, or unsuccessful during validation/tests. Existing working revisions remain intact.
+
+Validation: 149 automated tests passed, including real isolated helper execution and controlled browser fixtures. These checks do not establish live model reliability or compatibility with a particular website. No new dependency or model download is required.
+
+This release retains the compact personal memories added in 0.51.67. See [the local workshop guide](releases/0.51.71/LOCAL_TOOL_WORKSHOP.md) for supported helpers, source files, assessment requests and execution boundaries.
+
+## Arc 0.51.67 — compact personal memories
+
+Arc can now remember clear personal facts from new direct messages and reuse relevant details in future replies. Find the automatic list and its switch in **Settings → Memories → Details you’ve shared**.
+
+- Short personal facts save locally in encrypted storage, separate from exact manual notes.
+- Duplicates are ignored; clear positive corrections update the existing category. Users can edit, remove or clear facts. User edits are protected against automatic replacement.
+- No extra inference model or GPU memory is needed. Stored facts have a 768-token budget; each reply receives at most a 256-token relevant pack, only when context space permits.
+- Temporary voice, shared screen/audio, attachments, tool output and generated prompt templates are excluded from capture. Saved direct microphone questions can contribute facts.
+- Sensitive or ambiguous statements are skipped by the conservative English recognizer. Unsupported phrasing remains available for manual notes.
+- Turning off automatic capture or the saved-memory master switch pauses capture and recall. Queued captures cannot undo a later clear/disable action.
+
+See [automatic memory behavior and limits](releases/0.51.71/PERSONAL_MEMORIES.md). This update retains the Reddit draft/scheduling features from 0.51.66. No new dependency or model download is required.
+
+## Arc 0.51.66 — Reddit drafts and timed posting
+
+This beta adds **Settings → Reddit posts**, also accessible from Plugins. Enter a subreddit and topic, check the signed-in browser account, and generate up to ten editable title/body drafts with the currently selected local model. Draft generation keeps the selected model and context; no extra model or package is required.
+
+The chat tool can find the Reddit destination, read the clock, save drafts and stop a queue. The model cannot approve its own writing. After reviewing the exact drafts, account and community rules in settings, the user can enable a finite queue at **15, 30 or 60 minute intervals**. The first post waits one full interval. Each post includes a visible automation disclosure before review. Drafting guidance calls for natural, useful prose without fabricated personal experiences or sources.
+
+The browser adapter uses Arc's existing selected-browser connection and an observed Reddit text editor. It verifies the signed-in account, destination and exact live editor contents immediately before submission. It records submission intent on disk before one click, then checks the visible post and resulting permalink. Unknown outcomes pause for manual reconciliation instead of automatic retry. Login, CAPTCHA, required flair, restrictions, rate limits and unsupported layouts can stop a post without bypassing them. Other tabs and existing drafts are preserved.
+
+Approved contents are revision checked. Editing a queued draft revokes its approval. Queue progress and receipts persist locally. Restart, Windows lock and sleep pause the queue; resuming waits a fresh interval and does not send a catch-up burst. Foreground inference, voice and browser work take priority. The queue stops when its reviewed batch ends. Pause and Cancel do not delete already published Reddit posts.
+
+The new `read_clock` tool returns current local time, timezone and UTC. It does not grant scheduling permissions or change the system clock. A bundled workflow explains drafting, review, timing, evidence and recovery.
+
+## Validation and remaining live check
+
+The service and browser tests cover timer behavior, exact approvals, duplicate content, account changes, cancellation races, restart recovery, write failures and ambiguous submissions. The browser fixture uses the real Playwright controller against locally intercepted Reddit-shaped pages; it does not send a public post or access a personal browser profile. Responsive settings checks cover desktop and narrow layouts.
+
+Actual Reddit compatibility still needs the planned test on the owner's subreddit. This is a conservative text-post integration, not a guarantee that every Reddit layout, flair requirement or account restriction is supported.
+
+---
+
+## Prior publication: cumulative release 0.51.65
 
 Published October 12, 2026. This Windows x64 update includes **0.51.61–0.51.65** since public 0.51.60.
 

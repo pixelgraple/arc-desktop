@@ -4,13 +4,26 @@
 
 Arc brings local models, voice, screen context, research and task tools into one Windows desktop app. Its standout feature is **Show Arc**: share a screen or window and optional computer audio, then have a conversation about it. Local speech, vision and a text model work together; you choose when sharing starts and stops.
 
-**Current release: 0.51.65 · Windows x64 · development build**
+**Current release: 0.51.71 · Windows x64 · development build**
 
-[Download the Windows installer](https://github.com/pixelgraple/arc-desktop/releases/download/v0.51.65/Arc-Setup-0.51.65.exe) · [Release notes](https://github.com/pixelgraple/arc-desktop/releases/tag/v0.51.65) · [Version history](CHANGELOG.md) · [Arc website](https://arc-net.xyz/)
+[Download the Windows installer](https://github.com/pixelgraple/arc-desktop/releases/download/v0.51.71/Arc-Setup-0.51.71.exe) · [Release notes](https://github.com/pixelgraple/arc-desktop/releases/tag/v0.51.71) · [Version history](CHANGELOG.md) · [Arc website](https://arc-net.xyz/)
 
 This repository distributes Arc releases and documentation. Optional model weights are downloaded separately; they are not packed into the installer. Arc remains under active development, and external sites, hardware and model behavior can affect whether a task completes.
 
-## New in 0.51.65
+## New in 0.51.71
+
+- **Coordinated helper teams:** substantial High/Ultra tasks can use three focused preparation assignments and two actual-result reviews. Arc performs the work and supported corrections, then reports back. Up to 24 helpers are allowed per parent turn, with five admitted at a time and queued overflow.
+- **One model shared by the team:** inference takes turns on the selected runtime/GPU queue; Arc does not load one weight copy per helper. More helpers may take longer and consume bounded ordinary memory and storage. No real-model speed, VRAM or quality benchmark is claimed for this team feature.
+- **Complete extension projects:** create a browser-extension source folder with exact manifest/resource names, all planned files, supported static checks, bounded repairs and export. Clearer dependency planning fixes circular file-writing plans. Review code and permissions before manually installing any generated extension.
+- **Compact personal memory:** **Settings → Memories → Details you've shared** captures clear direct-message facts locally in encrypted storage. Edit, remove or disable them. Relevant recall stays small and uses no extra inference model.
+- **Reviewed Reddit queues — beta:** **Settings → Reddit posts** prepares 1–10 editable drafts and finite queues at 15/30/60-minute intervals after exact human review. No self-approval, unlimited queue or automatic duplicate retry. Live Reddit posting still needs a supervised account/community check.
+- **Clearer task routing:** inspection requests produce assessments; extension source and isolated local JSON helpers follow their own completion checks. Proposed future account actions are not performed just because they appear in a source request.
+
+For 0.51.71, 505 targeted Node tests, four native protocol tests, responsive helper UI checks, TypeScript, the production build, workflow integrity and packaged-helper checks passed. Scripted models establish orchestration and boundaries, not answer quality or universal completion. A separate 0.51.70 Strata trial produced a neutral four-file word-counter extension in 32.1 seconds after a 40.5-second load; Chromium passed its five local behavior checks. See the release notes for scope and limitations.
+
+[Changes since 0.51.65](releases/0.51.71.md) · [Helper teams](releases/0.51.71/DELEGATION.md) · [Memory controls](releases/0.51.71/PERSONAL_MEMORIES.md) · [Extension and local-helper guide](releases/0.51.71/LOCAL_TOOL_WORKSHOP.md) · [Reddit setup](releases/0.51.71/REDDIT_POSTS.md)
+
+## Earlier improvements in 0.51.65
 
 - **Four measured VRAM tiers:** choose Light, Balanced, Maximum or Extreme in **Settings → AI Performance → Lower VRAM usage**. Arc tests supported cache/buffer settings and eligible CPU placement while keeping the selected model and context. The short comparison accepts at most 20%, 35%, 50% or 75% generation speed loss respectively, with the same prompt-speed check when normal timing is available; real task speed and memory savings vary.
 - **Clearer research screenshots:** validate visible page areas, use a readable viewport unless whole-page coverage was requested, and deliver the actual saved image with its vision observations. Final-answer repairs preserve substantive explanations alongside the image; a persistent plan-only reply is reported as incomplete.
@@ -21,7 +34,7 @@ This repository distributes Arc releases and documentation. Optional model weigh
 
 These are tested tool and workflow improvements, not a guarantee that every model answer is accurate or every task will finish.
 
-### Measured on Arc Focus and RTX 5090
+### Historical 0.51.65 measurements on Arc Focus and RTX 5090
 
 One Windows PC, 16,384-token context, three 512-token generation samples per mode. These are **raw whole-device text-generation peaks**, not exclusive model allocations; pre-load medians were not subtracted.
 
@@ -65,7 +78,7 @@ Sign-ins, CAPTCHAs and human-verification checks remain the user's responsibilit
 - **Created Files:** create, inspect, revise and append to saved files, with verified receipts and appropriate syntax/behavior checks. Image cards support previews, Save a copy and Open folder.
 - **Local PHP workspace:** develop and preview a PHP site locally before publishing reviewed changes through SSH. Uses optional Docker/PHP containers; it is not a complete XAMPP/MySQL distribution. Publishing is a separate explicit action with revision checks and backups.
 - **Generated Python:** runs in a fresh Pyodide/WebAssembly environment with a virtual filesystem, bounded inputs/outputs and no host shell, network package installs or UAC access. Third-party integrations and authorized SSH operations have separate permissions.
-- **Guides and helpers:** thousands of optional task instructions, specialized voice/story/Ultra playbooks, and up to three read-only helpers sharing the selected inference queue. Import your own JSON, text or Markdown guides in **Settings → Plugins**, using the included examples. Guides are instructions, not executable plugins.
+- **Guides and helpers:** thousands of optional task instructions, specialized voice/story/Ultra playbooks, and coordinated read-only helper teams with up to 24 assignments per turn, five admitted at once, sharing the selected inference queue. Import your own JSON, text or Markdown guides in **Settings → Plugins**, using the included examples. Guides are instructions, not executable plugins.
 - **Memory and model residency:** keep the selected model loaded between replies; temporarily switching for vision restores the original selection where possible. Shared GPU scheduling and errors can still require a handoff. Local SSD-backed originals and retrieval support longer tasks without pretending to enlarge the active model context.
 
 ## Models and hardware
@@ -88,7 +101,7 @@ Strata uses its own SSD-aware inference engine; it is not routed through llama.c
 
 Local sight and speech use separate optional models. The hardware optimizer benchmarks a bounded set of installed, compatible configurations and uses a default **32 GiB Arc system-RAM ceiling**. Windows CPU, CUDA and Vulkan execution paths are implemented; detecting AMD, Intel or Apple hardware does not mean every corresponding acceleration backend is implemented. This release is Windows x64, not a macOS build.
 
-The new [workload report](docs/VRAM_WORKLOAD_REPORT_0.51.65.md) compares Normal and four memory tiers, identifying the tested GPU, model, context, tuning and resource counters. It separates short calibration from research, screenshots, vision and file completion. These results do not establish universal VRAM savings, lower-card fit or model accuracy. See [the memory design](docs/MEMORY_ARCHITECTURE.md) for what stays on GPU, what can use RAM, and why Strata's SSD-aware engine is separate.
+The historical 0.51.65 [workload report](docs/VRAM_WORKLOAD_REPORT_0.51.65.md) compares Normal and four memory tiers, identifying the tested GPU, model, context, tuning and resource counters. It separates short calibration from research, screenshots, vision and file completion. These results do not establish universal VRAM savings, lower-card fit or model accuracy. See [the memory design](docs/MEMORY_ARCHITECTURE.md) for what stays on GPU, what can use RAM, and why Strata's SSD-aware engine is separate.
 
 ## Additional features and current limits
 
@@ -100,14 +113,14 @@ Local inference stays on the PC when local components are used. Web search, conn
 
 ## Download verification and release status
 
-`Arc-Setup-0.51.65.exe` is approximately 319 MiB (334,808,652 bytes).
+`Arc-Setup-0.51.71.exe` is approximately 319 MiB (334,855,928 bytes).
 
 SHA-256:
 
 ```text
-f5397fc3aa9515654d9aac0de14674537921e9d8e805258bc413b5bbd2ac993b
+1ef87546e639ce80a0c2914dfceee2ba0dd6fdbd0404a74ef27b89c7fc76bf6b
 ```
 
-The release includes `SHA256SUMS.txt`, detailed release notes and the [workload report](docs/VRAM_WORKLOAD_REPORT_0.51.65.md). This installer is **not Authenticode-signed**. No matching VirusTotal report has been supplied for this exact build; older reports do not scan this file. Signed application-update metadata is a separate protection.
+The release includes `SHA256SUMS.txt`, a cumulative changelog and [detailed release notes](releases/0.51.71.md). The historical [0.51.65 workload report](docs/VRAM_WORKLOAD_REPORT_0.51.65.md) remains in the repository with its original scope. This installer is **not Authenticode-signed**. No matching VirusTotal report has been supplied for this exact build; older reports do not scan this file. Signed application-update metadata is a separate protection.
 
-The workload report records final automated and real-task verification with its limitations. Browser/account restrictions and model behavior can still prevent task completion. Authenticated eBay sold-listing results and real Twitch account delivery retain their documented setup requirements.
+Current release notes separate scripted helper-team checks, the earlier neutral Strata extension trial and unverified live Reddit posting. The historical workload report retains its own automated and real-task verification limits. Browser/account restrictions and model behavior can still prevent task completion. Authenticated eBay sold-listing results and real Twitch account delivery retain their documented setup requirements.
