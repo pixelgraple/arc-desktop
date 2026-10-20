@@ -1,8 +1,119 @@
-# Arc version history — cumulative release 0.51.75
+# Arc version history — cumulative release 0.51.83
 
-Published October 15, 2026. Changes since public 0.51.71: 0.51.72–0.51.75. Later versions supersede earlier behavior, including the retired Reddit interval queue. Test counts retain their original scope and overlap.
+Published October 19, 2026. Changes since public 0.51.75: 0.51.76–0.51.83. Later entries supersede earlier behavior. Test scopes overlap; counts should not be added together.
 
-[Feature overview](README.md) · [Release notes](releases/0.51.75.md)
+[Feature overview](README.md) · [Release notes](releases/0.51.83.md)
+
+## Arc 0.51.83 — Music from Home, without model inference
+
+- Recognize direct song and playlist search requests from Home, chat and Hey Arc before model loading or inference, in Instant and Ultra.
+- Open Music automatically for searches and links, with the requested name and Song/Playlist choice already filled in. Keep the search form above the queue.
+- Use CPU/network search, resolution and audio playback. Typed music receipts skip text-to-speech; the selected AI model remains unchanged.
+- Keep minimized/hidden windows in the background for voice commands. Pause, resume, skip and voice media focus preserve the current view.
+- Ask locally for a missing song/playlist title instead of guessing or loading an AI model. Keep ordinary video research and quoted examples on the normal chat path.
+- Retain the stream recovery improvements from 0.51.82 and the persistent player across navigation.
+
+Public YouTube audio availability remains experimental and subject to source restrictions. Voice recognition still uses the existing configured speech engine; music itself uses no inference model.
+
+
+## Arc 0.51.82 — Music stream resilience
+
+- Finish and validate each audio segment in a small CPU/RAM buffer before delivering it to the player. A paused or slow player no longer keeps that upstream response open.
+- Retry transient network failures, incomplete segments and temporary server errors twice, starting at the same byte position. Partial failed segments never reach the decoder, so retries do not duplicate audio.
+- Bound connection and body waits. Stop and track changes still cancel outstanding work; access-denied responses are not repeatedly requested.
+- Replace the generic playback warning with network, timeout, incomplete-segment, format or HTTP details. Store only the latest sanitized transport error locally for troubleshooting, without song names, account data or signed media URLs.
+- Keep song/playlist search, voice/text controls and minimized playback. Music requires no inference model or GPU allocation and creates no saved music files.
+
+Public YouTube stream availability remains experimental. An ad blocker does not repair direct audio transport errors; uBlock Origin has not been embedded in this audio-only path.
+
+
+## Arc 0.51.81 — Music by voice and text
+
+- Ask Arc to play a song or named public YouTube playlist without pasting a link. The same command works in chat and Hey Arc.
+- Pause, resume, skip, go to the previous track, and stop through direct commands. Controls use actual playback acknowledgments and do not ask the model to invent a plan.
+- Search in Music settings now plays inside Arc. Exact saved playlist names take priority; public playlist matches load up to 100 entries. Song searches queue up to five matches.
+- Keep the persistent audio player running while working, changing chats, closing Settings or minimizing Arc.
+- Explicit Pause stays paused when Voice finishes. Arc now includes its own player when deciding whether a conversation paused media.
+- Preserve commands spoken immediately after the wake phrase. Native recognition checks for additional speech after its keyword, and the CPU transcription worker gets a longer first-start allowance. Unrelated ambient transcripts are not forwarded or saved.
+- Keep existing pasted links, saved playlists, browser fallback, model selections and speech privacy preferences.
+
+Public YouTube stream access remains experimental. Some tracks may be inaccessible; Arc does not bypass sign-in, DRM, geography or live-stream restrictions. Audio transport and its pinned resolver remain unchanged. Automated decoding checks are performed with speakers muted; microphone recognition is tested with synthetic Windows speech and local CPU transcription.
+
+Included in the cumulative public 0.51.83 release.
+
+
+## Arc 0.51.80 — In-app audio player
+
+Public YouTube video and playlist links can now play audio directly inside Arc. A persistent floating player provides Play/Pause, Previous/Next, seeking, volume and Stop, with a collapsible layout. Music continues when Settings closes, conversations change or Arc is minimized. Tracks advance automatically, and the queue stops at its end.
+
+The Music section shows the current queue (up to 100 entries), accepts single-video links, and adds **Play in Arc** to saved playlists. Existing playlist shortcuts and the explicit official-browser fallback remain. Voice's existing pause and volume-duck actions also control Arc's own player. No AI model or inference lease is required for music playback.
+
+Playback uses the existing managed Agent Reach/yt-dlp runtime and public audio-only streams. This is experimental, not an official or licensed YouTube integration. Private, sign-in-only, live and protected streams are unavailable. The app does not copy browser sessions or save music files. Inaccessible tracks show an error with Retry/Skip rather than looping through failures.
+
+The host keeps signed media locations private, uses revocable local stream capabilities, validates public DNS and redirects, and cancels pending work on Stop/Skip. Bounded byte ranges address an observed YouTube failure with open-ended ranges. Existing model, research, playlist library and browser features remain.
+
+Music includes its own checksum-verified yt-dlp 2026.08.19 wheel. A live check found that the older research extractor could return a stream that started but rejected later ranges; the newer resolver passed playback and seeking beyond that opening data. The shared research environment is preserved.
+
+See [Music instructions](releases/0.51.83/YOUTUBE_MUSIC.md) for setup, limits and the distinction between in-app audio and the official browser player.
+
+
+## Arc 0.51.79 — YouTube Music shortcuts
+
+Music now has its own settings section and a discoverable entry in Plugins and quick navigation. Save, rename, filter and remove up to 100 playlist shortcuts, search YouTube Music, or open a playlist without saving it. YouTube and YouTube Music links are normalized to the official music player, with tracking and redirect fields removed.
+
+Playback opens in the Windows default browser with that browser's existing session. It can continue while Arc is working, without loading an AI model. The official player handles sign-in, subscriptions, playback and available audio-only controls. Arc reports only that it requested the browser to open, not that playback or audio-only mode has been verified.
+
+The library uses serialized atomic writes and preserves corrupt records instead of overwriting them. Only approved HTTPS YouTube playlist destinations are launched. The current beta does not extract audio, embed hidden video, copy cookies or edit YouTube playlists. Existing research and Watch with Arc features are unchanged.
+
+See [YouTube Music instructions](releases/0.51.83/YOUTUBE_MUSIC.md) for setup and limitations. Actual account playback needs a live check in the user's signed-in player; service and UI tests do not prove subscription or regional availability.
+
+
+## Arc 0.51.78 — verified Focus workstation handoffs
+
+This update fixes issues reproduced with the installed Arc Focus model and the new workstation workflows. Existing features, permissions and failure checks remain enabled.
+
+- A request such as “do not create files or take screenshots” no longer accidentally demands visual research before a text answer can finish.
+- A workflow preface followed by “create this file” and “do not browse” now reaches file creation instead of repeatedly checking a nonexistent file.
+- Chunked writers distinguish source completion from task completion: finish the source before running tests. Empty waiting chunks stay rejected, with an explicit correction explaining how to finalize the source. Completed chunked JavaScript files then proceed directly to explicitly requested behavior tests. Writing test code or claiming a pass in a checkpoint does not count as running it.
+- The isolated QuickJS test environment supports silent `console.log`, `info`, `warn`, `error` and `debug` methods entirely inside the guest. These expose no host I/O and cannot increment assertion counts. Logging output itself is not tested.
+- JavaScript tests use a typed array of named assertions in the model-facing tool schema, avoiding nested JSON-string escaping and invented fields. The existing protected executor, revision checks, assertion limits and unchanged-test repair rules remain in force.
+- A syntax error in generated test code now leads to repairing that named test, not rewriting correct source or creating copies. Already valid assertions stay immutable, invalid test cases must remain named, and only a real rerun can clear the failed-check obligation. Source syntax errors remain source repairs.
+- Page-overview screenshots use a readable viewport without requiring an element reference. Requested element crops keep their existing scope. Multi-page requests retain separate saved captures and vision-analysis receipts.
+- The workstation record now observes the exact raw validation receipts before file-card formatting, so successful syntax and behavior checks appear in its counters and remain tied to the checked revision.
+- The coding and visual workstation guides explain these handoffs explicitly.
+- Explicit requests to use a named workstation workflow rank that guide first, instead of letting incidental terms in negative constraints select a different guide. Quoted examples and negated commands do not force this priority; selection remains reference-only.
+- During continuation, the model can explicitly finish the current file through a bound transition. Instructions consistently distinguish source completion from task completion. The same revision, output constraints and syntax checks still apply; testing remains a separate required step.
+- Chunked-writing tools are registered once after task eligibility checks, preventing duplicate tool-schema rejections when a coding task returns to its general tools. Damaged tool settings cannot enable these writers.
+- “Cite both official sources” now records a two-source research requirement. Once those sources are read, an unavailable optional third page leads to an evidence-based answer instead of repeated attempts at that page.
+
+The opt-in live verification launcher now uses Arc's shared GPU coordinator, matching the desktop's broker arrangement. The previous launcher's legacy queue option tried importing `dotenv` through Arc's minimal managed Python and failed before Focus started. No package was injected into that managed environment, and the shared Forge queue remains in use.
+
+Verification covers real Focus startup, ordinary conversation, saved JavaScript with syntax and isolated behavior checks, official-source web research, and two saved browser screenshots analyzed by the installed vision model. Results are scoped checks, not a guarantee that every prompt, website or generated program will succeed. Unsupported runtime environments and failed checks remain explicit.
+
+
+## Arc 0.51.77 — shared workstation task flow
+
+Arc now has a common task lifecycle around its existing conversation, research, coding, browser, vision and project paths. The model receives compact current-task receipts so it can continue from saved work and check results without repeatedly rebuilding the whole task history.
+
+- Added a bounded receipt record with file identities and hashes, source reads, saved screenshots and successful vision analyses.
+- Kept syntax and behavior-test results separate. Editing a file invalidates passes for the earlier revision in the task record.
+- Added an expandable “Recorded work” summary and activity phases to the existing thinking panel, using the same theme.
+- Added eight detailed workstation workflows in Settings → Plugins. Search for “Workstation”.
+- Preserved existing tools, features, saved-chat compatibility, permission checks and completion/failure guards. No additional planner calls or model reloads are introduced by this layer.
+
+The compact record uses the selected model's context; it does not provide unlimited context or guarantee task completion. Source reads, screenshots, vision and code tests each retain their own evidence requirements. See `WORKSTATION_ARCHITECTURE.md` for implementation and limits.
+
+
+## Arc 0.51.76 — finish research with an answer
+
+Fixed an Ultra failure in which an explanation question collected sources, repeatedly compacted context and ended with only “Work paused.” The affected installed 0.51.75 diagnostic recorded 15 tool-phase model attempts across approximately 215 seconds and no final composition attempt.
+
+- When read-only research stops producing new evidence, Arc now makes one tool-free, evidence-based answer attempt. It retains the original question, source evidence and uncertainty rather than reopening the search loop.
+- Read-only research uses a bounded work allowance even in Ultra; it proceeds to an answer instead of automatically starting another research epoch. File writing and other action workflows retain their existing continuation behavior.
+- Permission, access, repeated-failure and repeated-mutation stops remain authoritative. An idle round can no longer overwrite one of those stops with a softer no-progress reason.
+- A failed, empty or plan-only final attempt reports the specific composition failure. Cancellation still stops immediately. A truncated answer remains marked incomplete. Missing files, screenshots and explicitly requested source counts are not declared complete by this recovery.
+
+Validation includes focused regression tests at 8K and 16K context and three canaries using the already-loaded local Qwen3.8-27B model with isolated documentation fixtures. The canaries cover two induced research stalls and an ordinary two-source research request. They verify the orchestration and final-answer path, not every factual claim or arbitrary live website behavior. No model files, account permissions or saved conversations are changed by this release.
 
 ## Arc 0.51.75 — email, Reddit and timed-work guides
 

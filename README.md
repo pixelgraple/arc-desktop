@@ -4,27 +4,25 @@
 
 Arc brings local models, voice, screen context, research and task tools into one Windows desktop app. Its standout feature is **Show Arc**: share a screen or window and optional computer audio, then have a conversation about it. Local speech, vision and a text model work together; you choose when sharing starts and stops.
 
-**Current release: 0.51.75 · Windows x64 · development build**
+**Current release: 0.51.83 · Windows x64 · development build**
 
-[Download the Windows installer](https://github.com/pixelgraple/arc-desktop/releases/download/v0.51.75/Arc-Setup-0.51.75.exe) · [Release notes](https://github.com/pixelgraple/arc-desktop/releases/tag/v0.51.75) · [Version history](CHANGELOG.md) · [Arc website](https://arc-net.xyz/)
+[Download the Windows installer](https://github.com/pixelgraple/arc-desktop/releases/download/v0.51.83/Arc-Setup-0.51.83.exe) · [Release notes](https://github.com/pixelgraple/arc-desktop/releases/tag/v0.51.83) · [Version history](CHANGELOG.md) · [Arc website](https://arc-net.xyz/)
 
 This repository distributes Arc releases and documentation. Optional model weights are downloaded separately; they are not packed into the installer. Arc remains under active development, and external sites, hardware and model behavior can affect whether a task completes.
 
-## New in 0.51.75
+## New in 0.51.83
 
-This release includes the changes since public 0.51.71:
+**Music from Home, with CPU-only search and playback.** Type “play Get Lucky by Daft Punk”, “search for the song Take On Me on YouTube”, or “find an 80s hits playlist”. The same commands work after Hey Arc. Music opens, fills in the search and plays inside Arc.
 
-- **360 detailed guides:** 120 for email, 120 for Reddit and 120 for timed work. Find them in Settings → Plugins under Guides. Compact relevant guidance enters working context; complete instructions remain available through the paged reader. These guide existing capabilities rather than adding executable tools.
-- **Relevant saved-chat recall:** retrieve earlier work and recognized corrections from local saved written conversations. Use Settings → Memories → Use past conversations, or exclude recall for a request. No extra GPU model or training.
-- **One approved Reddit post, now or later:** review the exact account, community, title, body and time. Arc submits once while running and awake. This replaces interval batches; missed times and uncertain outcomes require review.
-- **Questionnaire-based email assistance:** choose categories, reply examples, sender filters and pace, then approve one supported inbox pass. Each message gets fresh local-model context, with delivery records and pause/stop controls.
-- **Better guide routing:** pause, cancel and status requests retain their intended operation; timed guidance requires a matching timed intent.
+- A persistent audio player provides Pause/Resume, Previous/Next, seeking, volume and Stop. Keep listening while changing chats or minimizing Arc.
+- Music commands bypass the chat model; search, stream resolution and audio playback need no LLM or inference GPU allocation. Your selected model stays available. Normal UI rendering and voice recognition are separate.
+- Save playlist shortcuts, play links, search public songs or playlists, and use text/voice controls. Exact saved playlist names take priority.
+- Small validated audio segments and bounded retries improve transport resilience. Errors retain useful network/format details.
+- Cumulative research and workstation repairs improve final answers, file/test handoffs, saved task records and screenshot/vision workflows.
 
-The release regression run passed 44 tests. The earlier email implementation passed 3,791 tests with 10 skips and no failures. Production and packaged-reader checks verify the shipped build. Counts cover different scopes and should not be added together. No new speed or VRAM benchmark is claimed.
+Public YouTube streaming is experimental and needs internet and the managed Agent Reach runtime. Private, sign-in-only, live and protected streams are unavailable. Normal video research stays separate. These changes do not claim a new model-speed or VRAM benchmark.
 
-Email adapters initially support fixed English paginated Gmail, Outlook and Proton layouts; live-account compatibility needs a supervised trial. Reddit posting also needs a supervised account check. Other timed-work guides cover reminders and planning, **not a general background research/file/email scheduler**.
-
-[Release details](releases/0.51.75.md) · [Guide index](releases/0.51.75/EMAIL_REDDIT_TIMED_GUIDES.md) · [Email setup](releases/0.51.75/EMAIL_ASSISTANT.md) · [Reddit setup](releases/0.51.75/REDDIT_POSTS.md) · [Chat recall](releases/0.51.75/CONVERSATION_RECALL.md)
+[Release details and checks](releases/0.51.83.md) · [Music setup and limits](releases/0.51.83/YOUTUBE_MUSIC.md) · [Workstation task records](releases/0.51.83/WORKSTATION_ARCHITECTURE.md) · [Earlier email, Reddit and timed-work release](releases/0.51.75.md)
 
 ## Earlier improvements in 0.51.65
 
