@@ -4,25 +4,21 @@
 
 Arc brings local models, voice, screen context, research and task tools into one Windows desktop app. Its standout feature is **Show Arc**: share a screen or window and optional computer audio, then have a conversation about it. Local speech, vision and a text model work together; you choose when sharing starts and stops.
 
-**Current release: 0.51.83 · Windows x64 · development build**
+**Current release: 0.51.85 · Windows x64 · development build**
 
-[Download the Windows installer](https://github.com/pixelgraple/arc-desktop/releases/download/v0.51.83/Arc-Setup-0.51.83.exe) · [Release notes](https://github.com/pixelgraple/arc-desktop/releases/tag/v0.51.83) · [Version history](CHANGELOG.md) · [Arc website](https://arc-net.xyz/)
+[Download the Windows installer](https://github.com/pixelgraple/arc-desktop/releases/download/v0.51.85/Arc-Setup-0.51.85.exe) · [Release notes](https://github.com/pixelgraple/arc-desktop/releases/tag/v0.51.85) · [Version history](CHANGELOG.md) · [Arc website](https://arc-net.xyz/)
 
 This repository distributes Arc releases and documentation. Optional model weights are downloaded separately; they are not packed into the installer. Arc remains under active development, and external sites, hardware and model behavior can affect whether a task completes.
 
-## New in 0.51.83
+## New in 0.51.85
 
-**Music from Home, with CPU-only search and playback.** Type “play Get Lucky by Daft Punk”, “search for the song Take On Me on YouTube”, or “find an 80s hits playlist”. The same commands work after Hey Arc. Music opens, fills in the search and plays inside Arc.
+**Review before replying:** High can check its final draft once; Ultra can check it twice. One correction is allowed when a substantive problem is found. The default-on toggle lives in the thinking-level menu. Reviews use the same selected model serially and cannot execute tools or expand permissions. Existing source, file and completion checks remain authoritative.
 
-- A persistent audio player provides Pause/Resume, Previous/Next, seeking, volume and Stop. Keep listening while changing chats or minimizing Arc.
-- Music commands bypass the chat model; search, stream resolution and audio playback need no LLM or inference GPU allocation. Your selected model stays available. Normal UI rendering and voice recognition are separate.
-- Save playlist shortcuts, play links, search public songs or playlists, and use text/voice controls. Exact saved playlist names take priority.
-- Small validated audio segments and bounded retries improve transport resilience. Errors retain useful network/format details.
-- Cumulative research and workstation repairs improve final answers, file/test handoffs, saved task records and screenshot/vision workflows.
+Extra checks cost time and tokens; they do not expand context or guarantee correctness. Instant, Medium and voice keep their existing paths.
 
-Public YouTube streaming is experimental and needs internet and the managed Agent Reach runtime. Private, sign-in-only, live and protected streams are unavailable. Normal video research stays separate. These changes do not claim a new model-speed or VRAM benchmark.
+**Arc's standalone music player has been removed.** YouTube video research, captions, transcripts and screen/audio context remain. TwinYou Music is separate.
 
-[Release details and checks](releases/0.51.83.md) · [Music setup and limits](releases/0.51.83/YOUTUBE_MUSIC.md) · [Workstation task records](releases/0.51.83/WORKSTATION_ARCHITECTURE.md) · [Earlier email, Reddit and timed-work release](releases/0.51.75.md)
+[Release details and validation](releases/0.51.85.md) · [Review setup and limits](releases/0.51.85/ANSWER_REVIEW.md) · [Version history](CHANGELOG.md)
 
 ## Earlier improvements in 0.51.65
 
