@@ -4,21 +4,23 @@
 
 Arc brings local models, voice, screen context, research and task tools into one Windows desktop app. Its standout feature is **Show Arc**: share a screen or window and optional computer audio, then have a conversation about it. Local speech, vision and a text model work together; you choose when sharing starts and stops.
 
-**Current release: 0.51.85 · Windows x64 · development build**
+**Current release: 0.51.92 · Windows x64 · development build**
 
-[Download the Windows installer](https://github.com/pixelgraple/arc-desktop/releases/download/v0.51.85/Arc-Setup-0.51.85.exe) · [Release notes](https://github.com/pixelgraple/arc-desktop/releases/tag/v0.51.85) · [Version history](CHANGELOG.md) · [Arc website](https://arc-net.xyz/)
+[Download the Windows installer](https://github.com/pixelgraple/arc-desktop/releases/download/v0.51.92/Arc-Setup-0.51.92.exe) · [Release notes](https://github.com/pixelgraple/arc-desktop/releases/tag/v0.51.92) · [Version history](CHANGELOG.md) · [Arc website](https://arc-net.xyz/)
 
 This repository distributes Arc releases and documentation. Optional model weights are downloaded separately; they are not packed into the installer. Arc remains under active development, and external sites, hardware and model behavior can affect whether a task completes.
 
-## New in 0.51.85
+## New in 0.51.92
 
-**Review before replying:** High can check its final draft once; Ultra can check it twice. One correction is allowed when a substantive problem is found. The default-on toggle lives in the thinking-level menu. Reviews use the same selected model serially and cannot execute tools or expand permissions. Existing source, file and completion checks remain authoritative.
+**Protected desktop packaging:** Arc's application JavaScript is transformed for release, with internal names minimized and selected reasoning/prompt strings obscured. Electron verifies the application archive and requires loading the app from that archive. Production Node environment-option injection and command-line inspector activation are disabled.
 
-Extra checks cost time and tokens; they do not expand context or guarantee correctness. Instant, Medium and voice keep their existing paths.
+Coding, SSH, browser automation, custom tools and local models remain available. The required Node helper mode remains enabled. These measures make casual inspection and modification harder; they cannot make local software impossible to reverse-engineer.
 
-**Arc's standalone music player has been removed.** YouTube video research, captions, transcripts and screen/audio context remain. TwinYou Music is separate.
+**Desktop and prompt repairs:** this public installer includes the intervening local releases through 0.51.91. Read each version's notes for its actual tested scope.
 
-[Release details and validation](releases/0.51.85.md) · [Review setup and limits](releases/0.51.85/ANSWER_REVIEW.md) · [Version history](CHANGELOG.md)
+**Current protected release:** use the current download above. Historical notes and checksums are retained as history.
+
+[Release details and validation](releases/0.51.92.md) · [Version history](CHANGELOG.md)
 
 ## Earlier improvements in 0.51.65
 
@@ -110,14 +112,14 @@ Local inference stays on the PC when local components are used. Web search, conn
 
 ## Download verification and release status
 
-`Arc-Setup-0.51.75.exe` is approximately 320 MiB (335,240,500 bytes).
+`Arc-Setup-0.51.92.exe` is approximately 319 MiB (333,763,535 bytes).
 
 SHA-256:
 
 ```text
-6b46b4833e93cc40ab6b1068fb1a327b16b994e76b15380810ed639bcb2ac3ad
+b8c839a84e5ca2c95b8f4756ddae777696f41bd4c667ee6865570f6fd2243755
 ```
 
-The release includes `SHA256SUMS.txt`, a cumulative changelog and [detailed release notes](releases/0.51.75.md). The historical [0.51.65 workload report](docs/VRAM_WORKLOAD_REPORT_0.51.65.md) remains in the repository with its original scope. This installer is **not Authenticode-signed**. No matching VirusTotal report has been supplied for this exact build; older reports do not scan this file. Signed application-update metadata is a separate protection.
+The release includes `SHA256SUMS.txt`, a cumulative changelog and [detailed release notes](releases/0.51.92.md). The installer is not Windows Authenticode-signed. Signed application-update metadata is a separate protection. No matching VirusTotal result is claimed for this exact file.
 
-Current release notes distinguish automated guide, email, scheduling and package checks from unverified live-account behavior. The historical workload report retains its own automated and real-task verification limits. Browser/account restrictions and model behavior can still prevent task completion. Authenticated eBay sold-listing results and real Twitch account delivery retain their documented setup requirements.
+Historical release notes and workload reports retain their original scope and limits. Their retired installer names and checksums are historical records. Use the current download link above. Browser/account restrictions and local-model behavior can still prevent task completion.

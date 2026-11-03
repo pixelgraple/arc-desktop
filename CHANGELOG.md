@@ -1,8 +1,261 @@
-# Arc version history — cumulative release 0.51.85
+# Arc version history — cumulative release 0.51.92
 
-Published October 25, 2026. Changes since public 0.51.83: 0.51.84–0.51.85. Later entries supersede earlier behavior. Test scopes overlap.
+Published November 3, 2026. Changes since public 0.51.85: local desktop and prompt repairs plus protected release packaging. Later entries supersede earlier behavior. Test scopes overlap and are not additive.
 
-[Feature overview](README.md) · [Release notes](releases/0.51.85.md)
+[Current download](https://arc-net.xyz/download.html) · [Release notes](releases/0.51.92.md)
+
+Older downloadable EXEs are being replaced by the current protected installer. Their notes and checksums remain historical records.
+
+## Arc 0.51.92 — Protected desktop release
+
+The Windows installer now packages a transformed copy of Arc's application code, instead of readable development JavaScript. Production builds minify first-party modules, rename internal variables and obscure strings in selected reasoning and prompt-authoring modules. Development files remain unchanged. Third-party libraries retain their license notices and normal behavior.
+
+Electron validates the application archive against a hash embedded in the executable and requires loading the application from that archive. Production builds also disable Node environment-option injection and command-line inspector activation. The Hey Arc widget now explicitly disables Developer Tools, matching the main production window.
+
+Coding tools, SSH, local workflows, browser automation, custom tools and model execution remain available. Electron's Node helper mode stays enabled because those features depend on it. Signed update manifests remain in use. These measures make casual inspection and package modification harder; they do not make local code secret or impossible to reverse-engineer. This release does not add licensing, online activation or debugger traps.
+
+The build runs checks against the transformed runtime and repeats packaged helper checks after the final executable fuses are set. Source maps, local test profiles, build manifests and original source copies are excluded from the first-party release payload. Windows Authenticode signing is separate from signed update manifests and requires a publisher signing certificate.
+
+
+## Arc 0.51.91 — Image prompt runtime repair
+
+Image-prompt requests at the normal 16,384-token context could fail immediately in 0.51.90. The authoring route requested 6,553 output tokens even though the native runtime accepts at most 4,096 per call. The request was rejected before inference, but the prompt writer incorrectly reported that the model had stopped responding.
+
+- The prompt writer now shares the runtime's output limit. Drafts, corrections, continuation calls and later prompts in a batch all respect it. This does not reduce the selected context window or remove continuation support.
+- Failures retain a safe error category and actionable explanation instead of incorrectly reporting every rejection as a stopped model.
+- Local turn diagnostics now record prompt-writing progress and model-attempt categories. They omit prompts, raw exceptions, file paths and model outputs.
+
+Regression coverage goes through the real tool agent, context-fallback adapter and native runtime validation at all supported context sizes, including the Qwen3 4B model currently labeled Arc Swift at 16,384 tokens with Extended work/Ultra. The native worker in these deterministic tests is a fixture; separate CPU acceptance uses those installed weights and the real Python worker. The exact reported beach prompt completed in one call with an 83-word result. The previous live test used an 8,192-token context and direct HTTP, which missed the default-context boundary.
+
+Validation results and the live acceptance record are saved under `work/qa/` and `.test-output/` in the development workspace. No model weights, LoRAs, user inference preferences or GPU jobs are changed by this repair.
+
+
+## Arc 0.51.90 — Model-aware image prompt writing
+
+Image-prompt requests now have a dedicated authoring route. Arc detects targets such as Krea2, FLUX, SDXL and Illustrious and writes ready-to-paste prompt text instead of turning the task into a scene-analysis essay or a browser-research workflow.
+
+- Krea2 receives cohesive natural-language prompts; SDXL and illustration checkpoints receive appropriately compact phrasing or tags. Distinct Krea/FLUX and Pony versions remain separate.
+- Pure prompt requests skip unrelated task interpretation, optional guides, PC checks and browser tools. Descriptive scene words no longer produce an unrequested “Visual research is incomplete” warning.
+- Explicit prompt counts and word requirements are checked. Batches are written one prompt at a time with bounded correction and continuation, preserving completed work if a later item cannot finish.
+- Reference-image requests retain visible observations and the user's latest corrections. Requested research, browser inspection, file saving and prompt-generator coding keep their existing tools and evidence requirements.
+- Existing system instructions and content boundaries remain in force. No model weights or LoRAs are trained by this update.
+
+Validation on November 2, 2026: 133 related unit/integration checks and four Electron IPC routing checks passed; TypeScript and the production frontend build passed. Installed Arc Focus (Qwen3 4B Instruct 2507 Q4_K_M) also passed CPU-only live checks: a 118-word Krea2 paragraph, a 49-word SDXL tag prompt, and a three-prompt Krea2 batch measuring 100, 100 and 90 words within the requested 60–100 range. The live batch test exposed a parser bug where “one paragraph per prompt” overrode the batch count; this was fixed and the failed case rerun successfully.
+
+The two unrelated broader-suite failures found during investigation (a task-memory checkpoint fixture and a slide question routed to public-fact research) also reproduce with the runtime changes reversed. This release does not claim the entire legacy test suite passes. Vision handoff is covered by controlled tests; no new image was generated, and the live text checks used no GPU inference.
+
+See [Image prompt authoring](https://github.com/pixelgraple/arc-desktop/blob/v0.51.92/releases/0.51.92/IMAGE_PROMPT_AUTHORING.md) for route behavior, limits and primary model-documentation sources.
+
+
+## Arc 0.51.89 — Native app discovery and desktop recovery
+
+This update repairs failures reproduced while asking Arc to open and use
+Windows Calculator. Actual installed-app acceptance is recorded separately in
+QA_0.51.89.md; passing source checks does not establish task completion.
+
+Desktop requests now discover installed supported applications before the
+model chooses what to open. Exact returned app identities remain available
+through context fitting. Loading tool descriptions is no longer mistaken for
+discovering installed apps.
+
+When a launch is rejected before dispatch, Arc can refresh the app list and
+return the current identities. Expired desktop observations can trigger a
+bounded read of the same previously observed window. These recovery reads do
+not repeat a launch, click or keystroke. Unknown outcomes still require fresh
+inspection.
+
+Invalid PC arguments return bounded field-level corrections alongside the
+exact action schema. Diagnostics record the supported action name and PC error
+code without retaining arguments or private window contents.
+
+Successful desktop inputs receive an immediate inspection of the same window.
+The next model step can use that fresh view directly instead of spending a
+separate generation round asking to look. Expired element references require
+a fresh comparison of the complete accessible window state; changed or
+incomplete views are returned for reconsideration instead of replaying input.
+
+The desktop conversation keeps stable instructions at the beginning of model
+requests and places changing task state beside the latest result. This lets
+the local runtime reuse more cached prompt processing between actions,
+especially on CPU and smaller models. Current observations, pending outcomes,
+the original request and the existing permission checks remain in force.
+
+App launch and delivered input are intermediate steps. Arc must inspect the
+resulting app state and compare it with the user's request before reporting
+completion. This update does not change model weights or enable PC access
+without the user's session connection.
+
+
+## Arc 0.51.88 — Desktop task continuity
+
+This update addresses the connected computer-use failure reproduced in 0.51.87.
+Verification evidence and any remaining limitations are recorded separately in
+QA_0.51.88.md. Package availability alone does not establish native-task success.
+
+### Continuing a desktop task
+
+When the model answers before a requested PC action has completed, Arc keeps
+the original request and verified tool evidence available for the next step.
+Application continuation instructions use a valid conversation boundary instead
+of producing an assistant-only tail rejected by the runtime.
+
+Desktop working context retains the currently relevant tool schemas and
+observed app/window identities. Input still requires fresh native observations;
+retained history cannot authorize replaying a stale click or typing action.
+
+Direct desktop tasks load their enabled app and desktop schemas before the
+first model request. A focused prompt preserves Arc's protected machine and
+content boundaries while leaving unrelated tool guides available on demand.
+This reduces repeated preparation on smaller models and CPU configurations.
+Housekeeping reports a context refresh only when it actually changes context.
+
+For requests involving interaction inside an application, launching the app is
+not sufficient evidence of completion. Arc must perform the requested work and
+inspect the resulting state. Receipts establish what happened, and do not by
+themselves prove that the result satisfies the user's request.
+
+Existing session permissions, foreground checks and native action validation
+remain in effect. These changes do not alter model weights or enable access
+without the user's connection in Settings > This PC.
+
+
+## Arc 0.51.87 — Clearer desktop setup and usable controls in smaller contexts
+
+Release candidate. Final acceptance, packaging and installation are pending;
+see `QA_0.51.87.md` for the evidence checklist and current verification status.
+
+### Computer-use setup
+
+An explicit computer-use request checks the current This PC connection and
+permissions before starting the model. If Arc is disconnected, or the requested
+app and desktop permissions are missing, the reply points to Settings > This PC
+and explains the needed switches. It does not silently connect the computer or
+enable a permission.
+
+### Natural launch requests
+
+Direct requests such as “use my computer and open Calculator” retain the
+explicitly requested app when launch permission is checked. The existing
+restrictions on quoted instructions, explanations and negated requests remain
+in place.
+
+### Smaller desktop observations
+
+Straightforward native desktop tasks initially receive the three PC tools and
+tool discovery, instead of unrelated web and file schemas. Other enabled tools
+remain available on demand; mixed desktop, browser and file tasks keep their
+broader tool selection.
+
+Desktop observations keep compact, actionable controls when the model has a
+small context budget. Calculator's keypad and result display are preserved
+instead of dropping the controls at the end of the accessibility tree.
+Actionable element IDs remain tied to the original native observation. The
+result states when structural details or controls were omitted and still
+requires a fresh inspection after input.
+
+### Model startup and resource feedback
+
+Known startup, model, configuration and memory failures have specific user-facing
+messages rather than falling through to a generic unfinished reply. Diagnostics
+retain the failure category, while the UI uses fixed application messages.
+
+Temporary RAM or VRAM pressure leaves the user's selected model and successful
+benchmark records intact. It does not automatically replace the selected model
+with another model. Selecting an untested model from a protected cached profile
+now refreshes current resource availability before planning its compatibility
+test; cached free-memory measurements no longer stand in for current capacity.
+Verified engine capabilities are reused without repeating the full backend
+discovery just to refresh available memory.
+
+The while-away recap preserves the unfinished status of a reply and separates
+that status from individual tool steps that completed. A completed housekeeping
+step does not make an unfinished user task complete.
+
+Model cancellation and unloading now have bounded acknowledgments. An
+unresponsive Arc-owned worker receives a graceful shutdown, then termination
+of that exact worker if needed. Replacement is blocked when its exit cannot be
+confirmed. Unrelated applications and their processes are not targeted.
+
+These changes do not alter the model's weights or guarantee that every desktop
+application can be controlled. Existing foreground, observation, target and
+permission checks remain active. The exact Calculator task that prompted this
+release must pass live acceptance before the update is marked ready.
+
+
+## Arc 0.51.86 — Computer use and checked task completion
+
+### Desktop controls
+
+Settings > This PC now includes **Mouse, keyboard and screen**, initially off.
+After connecting with that permission, Arc can list visible Windows applications,
+inspect their controls, focus a window, click, replace text in editable fields,
+use supported keyboard shortcuts, scroll and capture a window. Screenshots can
+be analyzed by the installed local vision component. No new cloud service is
+required.
+
+Each input consumes a fresh window observation. Arc must inspect the window again
+before treating the interaction as checked. Supported controls use accessibility
+IDs instead of guessed coordinates. Native Windows EDIT/BUTTON fallback handles
+applications whose accessibility provider lacks useful control information.
+Desktop captures are bounded to twelve recent images, pruned after 24 hours on
+the next capture.
+
+These are Windows tools, not a promise that every application is supported.
+They operate standard-user windows in the current session. Arc control windows,
+terminal windows, credential dialogs and protected password fields are excluded.
+Custom canvases, inaccessible editors and drag-and-drop may need user help.
+
+### More reliable task completion
+
+An additional outcome ledger tracks explicitly requested files and applications
+separately. Saving one file cannot complete a two-file request. Opening one app
+cannot complete a request for two apps. The model gets concise reminders about
+unfinished steps, with bounded continuation and an honest incomplete result when
+the required evidence is missing.
+
+Existing High/Ultra draft review remains available. These changes improve tool
+use and verification; they do not modify model weights, expand context or
+guarantee correct reasoning. Clarifications and missing permissions remain
+visible rather than causing endless retries.
+
+### SSH repairs
+
+- A valid pasted private key with surrounding notes now loads correctly. Only
+  one complete key block is accepted; ambiguous multiple keys are rejected.
+- Arc can connect an already saved, trusted SSH profile for a requested server
+  task without exposing credentials to the model. Missing setup is explained.
+- Fresh saved connections start read-only. Editing and command permissions stay
+  explicit session switches; a stopped session is not silently restarted.
+- Requests such as “on my connected SSH server, find the project and create a
+  file” correctly route to SSH rather than the local Created Files plugin.
+- Existing exact paths, current-file hashes, verified original backups, atomic
+  writes and post-save verification are retained.
+- Explicit named-project requests now block changes in a different active
+  folder. Verified discovery and selection must establish the requested scope.
+  A successful save in the wrong project cannot complete the task. Quoted file
+  content and negative instructions do not introduce extra project targets.
+- Connection feedback distinguishes already confirmed status from unfinished
+  file work, reducing repeated status checks. Failure and cancellation limits
+  remain bounded.
+- Compound app launches such as “Open Notepad and Calculator” now recognize
+  both explicitly requested apps.
+
+### Verification
+
+Actual Windows desktop acceptance passed nine checks, including typing, mouse
+save, independent saved-file verification, keyboard input and a screenshot.
+Actual SSH service acceptance passed fourteen checks on a disposable server
+project, including discovery, create, edit, backup, stale-hash rejection, PHP
+lint, readback, download and saved reconnect. No live website files were edited.
+
+Prompt-driven Arc Focus tests passed local create/edit/readback, native desktop
+typing/clicking/save verification, and actual SSH discovery/create/edit/backup/
+readback. An independent read of the test files checked the exact final bytes.
+Calculator was exercised through real controls (2 + 2 = 4), and the installed
+local vision model read the neutral native screenshot's message and Saved label
+exactly. Detailed attempts, repairs and regression results are recorded with
+the release QA report; these bounded cases are not a general success-rate claim.
+
 
 ## Arc 0.51.85 — Review before replying
 
